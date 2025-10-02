@@ -1,0 +1,1699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nova's Aurora Adventure</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: radial-gradient(1200px 600px at 50% -10%, #0b122e, #02030a 60%, #000000 100%);
+            color: #e0e0e0;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .title-screen {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stars {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite ease-in-out;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        h1 {
+            font-size: 3.5em;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #00ff88, #00d4ff, #b19cd9);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            z-index: 10;
+            animation: titleGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes titleGlow {
+            0%, 100% { filter: drop-shadow(0 0 20px rgba(0, 255, 136, 0.4)); }
+            50% { filter: drop-shadow(0 0 40px rgba(0, 212, 255, 0.6)); }
+        }
+
+        .subtitle {
+            font-size: 1.5em;
+            color: #00d4ff;
+            margin-bottom: 40px;
+            z-index: 10;
+        }
+
+        .start-btn {
+            background: linear-gradient(135deg, #00ff88, #00d4ff);
+            color: #0a0e27;
+            border: none;
+            padding: 18px 45px;
+            font-size: 1.3em;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 10;
+            box-shadow: 0 8px 25px rgba(0, 212, 255, 0.3);
+        }
+
+        .start-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 12px 35px rgba(0, 212, 255, 0.5);
+        }
+
+        .scene {
+            background: rgba(26, 26, 46, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 50px;
+            margin: 50px 0;
+            border: 2px solid rgba(0, 212, 255, 0.2);
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.8s ease forwards;
+            position: relative;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .scene h2 {
+            font-size: 2.5em;
+            color: #00ff88;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .scene-number {
+            display: inline-block;
+            background: linear-gradient(135deg, #00ff88, #00d4ff);
+            color: #0a0e27;
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-size: 0.6em;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        /* Nova Avatar Styles */
+        .nova-avatar {
+            width: 120px;
+            height: 160px;
+            position: relative;
+            margin: 0 auto 30px;
+        }
+
+        .nova-head {
+            width: 60px;
+            height: 60px;
+            background: #f4c2a0;
+            border-radius: 50%;
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: headBob 2s ease-in-out infinite;
+        }
+
+        @keyframes headBob {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-5px); }
+        }
+
+        .nova-hair {
+            width: 70px;
+            height: 40px;
+            background: #2a1810;
+            border-radius: 50% 50% 20% 20%;
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .nova-ponytail {
+            width: 15px;
+            height: 35px;
+            background: #2a1810;
+            border-radius: 0 0 50% 50%;
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%) rotate(10deg);
+            animation: ponytailSwing 2s ease-in-out infinite;
+        }
+
+        @keyframes ponytailSwing {
+            0%, 100% { transform: translateX(-50%) rotate(10deg); }
+            50% { transform: translateX(-50%) rotate(-10deg); }
+        }
+
+        .nova-eyes {
+            display: flex;
+            gap: 15px;
+            position: absolute;
+            top: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .nova-eye {
+            width: 8px;
+            height: 8px;
+            background: #2a1810;
+            border-radius: 50%;
+            animation: blink 4s infinite;
+        }
+
+        @keyframes blink {
+            0%, 48%, 52%, 100% { height: 8px; }
+            50% { height: 2px; }
+        }
+
+        .nova-smile {
+            width: 20px;
+            height: 10px;
+            border: 2px solid #2a1810;
+            border-top: none;
+            border-radius: 0 0 20px 20px;
+            position: absolute;
+            top: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .nova-body {
+            width: 50px;
+            height: 60px;
+            background: linear-gradient(135deg, #4a90e2, #357abd);
+            border-radius: 10px 10px 15px 15px;
+            position: absolute;
+            top: 55px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .nova-arms {
+            position: absolute;
+            top: 65px;
+            width: 100%;
+        }
+
+        .nova-arm {
+            width: 15px;
+            height: 45px;
+            background: #4a90e2;
+            border-radius: 10px;
+            position: absolute;
+        }
+
+        .nova-arm-left {
+            left: 10px;
+            transform: rotate(-20deg);
+            animation: armWaveLeft 2s ease-in-out infinite;
+        }
+
+        @keyframes armWaveLeft {
+            0%, 100% { transform: rotate(-20deg); }
+            50% { transform: rotate(-40deg); }
+        }
+
+        .nova-arm-right {
+            right: 10px;
+            transform: rotate(20deg);
+            animation: armWaveRight 2s ease-in-out infinite;
+        }
+
+        @keyframes armWaveRight {
+            0%, 100% { transform: rotate(20deg); }
+            50% { transform: rotate(40deg); }
+        }
+
+        .nova-legs {
+            position: absolute;
+            top: 110px;
+            width: 100%;
+        }
+
+        .nova-leg {
+            width: 18px;
+            height: 40px;
+            background: #2c5aa0;
+            border-radius: 5px 5px 8px 8px;
+            position: absolute;
+        }
+
+        .nova-leg-left {
+            left: 35px;
+        }
+
+        .nova-leg-right {
+            right: 35px;
+        }
+
+        /* Camera in hand */
+        .nova-camera {
+            width: 25px;
+            height: 20px;
+            background: #2a2a3e;
+            border-radius: 5px;
+            position: absolute;
+            top: 90px;
+            right: 15px;
+            border: 2px solid #00d4ff;
+            animation: cameraShake 3s ease-in-out infinite;
+        }
+
+        @keyframes cameraShake {
+            0%, 90%, 100% { transform: rotate(0deg); }
+            92%, 96% { transform: rotate(-5deg); }
+            94%, 98% { transform: rotate(5deg); }
+        }
+
+        .camera-lens-small {
+            width: 10px;
+            height: 10px;
+            background: radial-gradient(circle, #00d4ff 30%, #1a1a3e 70%);
+            border-radius: 50%;
+            position: absolute;
+            top: 5px;
+            left: 7px;
+        }
+
+        .illustration {
+            width: 100%;
+            min-height: 350px;
+            border-radius: 15px;
+            margin: 30px 0;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .space-weather-diagram {
+            background: linear-gradient(180deg, #0a0e27 0%, #1a1a3e 100%);
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            padding: 40px;
+        }
+
+        .sun-icon {
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, #ffd700 0%, #ff8c00 70%);
+            border-radius: 50%;
+            animation: sunPulse 3s ease-in-out infinite;
+            box-shadow: 0 0 50px rgba(255, 215, 0, 0.6);
+        }
+
+        @keyframes sunPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .wave-path {
+            width: 200px;
+            height: 3px;
+            background: linear-gradient(90deg, #ff8c00 0%, #00d4ff 100%);
+            position: relative;
+        }
+
+        .particle {
+            width: 8px;
+            height: 8px;
+            background: #00ff88;
+            border-radius: 50%;
+            position: absolute;
+            animation: particleMove 2s linear infinite;
+        }
+
+        @keyframes particleMove {
+            0% { left: 0; opacity: 1; }
+            100% { left: 100%; opacity: 0; }
+        }
+
+        .earth-icon {
+            width: 90px;
+            height: 90px;
+            background: linear-gradient(135deg, #0066cc 0%, #00cc66 50%);
+            border-radius: 50%;
+            position: relative;
+            box-shadow: 0 0 40px rgba(0, 212, 255, 0.4);
+            animation: earthRotate 10s linear infinite;
+        }
+
+        @keyframes earthRotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .magnetosphere {
+            width: 120px;
+            height: 120px;
+            border: 3px dashed #00d4ff;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: shieldPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes shieldPulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.8; }
+        }
+
+        .flare-diagram {
+            background: linear-gradient(180deg, #000 0%, #1a0033 100%);
+            padding: 40px;
+        }
+
+        .flare-types {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .flare-card {
+            background: rgba(255, 140, 0, 0.1);
+            border: 2px solid rgba(255, 140, 0, 0.3);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .flare-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 140, 0, 0.2);
+        }
+
+        .flare-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+
+        .forecast-screen {
+            background: linear-gradient(135deg, #1a1a3e 0%, #0a0e27 100%);
+            padding: 30px;
+        }
+
+        .forecast-panel {
+            background: rgba(0, 212, 255, 0.1);
+            border: 2px solid #00d4ff;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+
+        .kp-meter {
+            width: 100%;
+            height: 40px;
+            background: linear-gradient(90deg, 
+                #00ff88 0%, 
+                #ffd700 33%, 
+                #ff8c00 66%, 
+                #ff0000 100%);
+            border-radius: 20px;
+            position: relative;
+            margin: 20px 0;
+        }
+
+        .kp-indicator {
+            width: 20px;
+            height: 50px;
+            background: white;
+            border: 3px solid #0a0e27;
+            position: absolute;
+            top: -5px;
+            left: 70%;
+            animation: kpSlide 3s ease-in-out infinite;
+        }
+
+        @keyframes kpSlide {
+            0%, 100% { left: 50%; }
+            50% { left: 75%; }
+        }
+
+        .gear-list {
+            background: rgba(0, 255, 136, 0.1);
+            border-left: 5px solid #00ff88;
+            padding: 25px;
+            margin: 25px 0;
+            border-radius: 10px;
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            margin: 12px 0;
+            font-size: 1.1em;
+        }
+
+        .checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #00ff88;
+            border-radius: 5px;
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #00ff88;
+            font-weight: bold;
+        }
+
+        .gps-visual {
+            background: linear-gradient(180deg, #0a0e27 0%, #1a1a3e 100%);
+            padding: 40px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .satellite-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .satellite {
+            width: 50px;
+            height: 50px;
+            background: #00d4ff;
+            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+            animation: satelliteFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes satelliteFloat {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(45deg); }
+        }
+
+        .map-backup {
+            width: 200px;
+            height: 150px;
+            background: #f4e6d8;
+            border: 3px solid #8b6f47;
+            border-radius: 5px;
+            position: relative;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3em;
+        }
+
+        .aurora-show {
+            background: linear-gradient(180deg, #000 0%, #001a33 50%, #003366 100%);
+            position: relative;
+            min-height: 450px;
+        }
+
+        .aurora-waves {
+            position: absolute;
+            width: 100%;
+            height: 250px;
+            top: 30px;
+        }
+
+        .aurora-wave {
+            position: absolute;
+            width: 100%;
+            height: 80px;
+            background: linear-gradient(180deg, 
+                transparent 0%,
+                rgba(0, 255, 136, 0.4) 30%,
+                rgba(0, 212, 255, 0.4) 60%,
+                rgba(177, 156, 217, 0.3) 80%,
+                transparent 100%);
+            animation: auroraFlow 5s ease-in-out infinite;
+        }
+
+        @keyframes auroraFlow {
+            0%, 100% { transform: skewX(-8deg) translateX(0); opacity: 0.6; }
+            50% { transform: skewX(8deg) translateX(20px); opacity: 1; }
+        }
+
+        .photographer-silhouette {
+            position: absolute;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .nova-photographing {
+            width: 100px;
+            height: 130px;
+            position: relative;
+        }
+
+        .tripod-stand {
+            width: 60px;
+            height: 80px;
+            position: absolute;
+            bottom: 0;
+            right: -40px;
+        }
+
+        .tripod-leg {
+            width: 3px;
+            height: 70px;
+            background: #333;
+            position: absolute;
+            bottom: 0;
+        }
+
+        .tripod-leg:nth-child(1) {
+            left: 20px;
+            transform: rotate(-20deg);
+        }
+
+        .tripod-leg:nth-child(2) {
+            left: 30px;
+        }
+
+        .tripod-leg:nth-child(3) {
+            left: 40px;
+            transform: rotate(20deg);
+        }
+
+        .camera-on-tripod {
+            width: 40px;
+            height: 30px;
+            background: #2a2a3e;
+            border: 2px solid #00d4ff;
+            border-radius: 5px;
+            position: absolute;
+            top: 0;
+            left: 10px;
+        }
+
+        .impact-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        .impact-card {
+            background: rgba(255, 140, 0, 0.1);
+            border: 2px solid rgba(255, 140, 0, 0.3);
+            border-radius: 15px;
+            padding: 30px;
+            transition: transform 0.3s ease;
+        }
+
+        .impact-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 140, 0, 0.15);
+        }
+
+        .impact-emoji {
+            font-size: 3.5em;
+            display: block;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .impact-card h3 {
+            color: #00ff88;
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        .photo-gallery {
+            background: linear-gradient(135deg, #1a1a3e 0%, #2d1b4e 100%);
+            padding: 40px;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .photo-frame {
+            aspect-ratio: 4/3;
+            background: linear-gradient(135deg, #00ff88 0%, #00d4ff 50%, #b19cd9 100%);
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+            border: 3px solid rgba(0, 212, 255, 0.5);
+            transition: transform 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            animation: photoFade 8s ease-in-out infinite;
+        }
+
+        @keyframes photoFade {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
+        }
+
+        .photo-frame:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.4);
+        }
+
+        .resources-box {
+            background: rgba(0, 212, 255, 0.1);
+            border: 2px solid #00d4ff;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+        }
+
+        .resource-item {
+            color: #00ff88;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 8px;
+            font-size: 1.1em;
+        }
+
+        p {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+            text-align: justify;
+        }
+
+        .info-box {
+            background: rgba(0, 212, 255, 0.1);
+            border-left: 5px solid #00d4ff;
+            padding: 25px;
+            margin: 25px 0;
+            border-radius: 10px;
+        }
+
+        .info-box h3 {
+            color: #00d4ff;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        strong {
+            color: #00ff88;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        ul {
+            margin-left: 30px;
+            margin-top: 10px;
+        }
+
+        li {
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        /* Nova thinking animation */
+        .nova-thinking .nova-head {
+            animation: headThink 1s ease-in-out infinite;
+        }
+
+        @keyframes headThink {
+            0%, 100% { transform: translateX(-50%) rotate(-5deg); }
+            50% { transform: translateX(-50%) rotate(5deg); }
+        }
+
+        .thought-bubble {
+            position: absolute;
+            top: -60px;
+            right: -80px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #0a0e27;
+            padding: 15px;
+            border-radius: 20px;
+            font-size: 2em;
+            animation: bubbleFloat 2s ease-in-out infinite;
+        }
+
+        @keyframes bubbleFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Pagination controls */
+        .pager { display:flex; gap:10px; align-items:center; justify-content:space-between; position: sticky; top: 0; background: linear-gradient(180deg, #0a0e27cc, #1a1a2ecc); padding: 10px 0; backdrop-filter: blur(6px); border-bottom: 1px solid rgba(0,212,255,0.2); }
+        .pager .btn { background: linear-gradient(135deg, #00ff88, #00d4ff); color:#0a0e27; border:none; padding:10px 14px; border-radius:10px; font-weight:700; cursor:pointer; }
+        .pager .dots { display:flex; gap:6px; justify-content:center; flex:1; }
+        .pager .dot { width:10px; height:10px; border-radius:999px; background:#1a2252; border:1px solid #00d4ff; cursor:pointer; }
+        .pager .dot[aria-current="page"] { background:#00d4ff; box-shadow:0 0 0 4px rgba(0,212,255,0.2); }
+        .controls-bar-inline { display:flex; gap:10px; align-items:center; }
+
+        /* 3D background canvas */
+        .three-bg-canvas { position: fixed; inset: 0; width: 100vw; height: 100vh; z-index: 0; pointer-events: none; }
+        .container, .site-header, .pager, .scene, .chapters-backdrop, .modal-backdrop { position: relative; z-index: 1; }
+
+        /* Site chrome */
+        .site-header { position: sticky; top:0; z-index: 1200; background: linear-gradient(180deg, #04081acc, #0a1030cc); backdrop-filter: blur(8px); border-bottom: 1px solid rgba(0,212,255,0.2); }
+        .site-header .bar { max-width: 1200px; margin: 0 auto; display:flex; align-items:center; justify-content:space-between; padding: 10px 16px; }
+        .brand { display:flex; align-items:center; gap:10px; font-weight: 900; letter-spacing: .5px; text-transform: uppercase; }
+        .brand-badge { width:28px; height:28px; border-radius:50%; background: radial-gradient(circle at 30% 30%, #fff 8%, #00d4ff 45%, #0a0e27 90%); box-shadow: 0 0 16px rgba(0,212,255,.5); border:1px solid #00d4ff66; }
+        .brand-text { background: linear-gradient(135deg, #00ff88, #00d4ff, #b19cd9); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip:text; font-size: 1.1em; }
+        .nav-links { display:flex; gap:10px; align-items:center; }
+        .nav-btn { background: none; border:1px solid rgba(0,212,255,0.35); color:#d9f6ff; padding:8px 12px; border-radius:10px; cursor:pointer; font-weight:700; }
+        .nav-btn:hover { background: rgba(0,212,255,0.12); border-color:#00d4ff; }
+
+        .site-footer { margin-top: 40px; border-top:1px solid rgba(0,212,255,0.18); padding: 18px 0; background: linear-gradient(180deg, #0a0e27cc, #050816cc); }
+        .footer-inner { max-width: 1200px; margin:0 auto; padding: 0 16px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; color:#9bd; font-size: .95em; }
+        .footer-links { display:flex; gap:12px; }
+
+        /* Generic modal (Resources/About) */
+        .modal-backdrop { position: fixed; inset:0; background: rgba(5,10,30,0.72); display:none; align-items:center; justify-content:center; z-index: 1100; }
+        .modal { width: min(900px, 92vw); max-height: 86vh; overflow:auto; background: radial-gradient(1200px 400px at 50% -20%, #14213d, #0a0f2b); border:1px solid rgba(0,212,255,0.25); border-radius:16px; box-shadow: 0 20px 60px rgba(0,0,0,0.6); padding: 20px 24px; }
+        .modal h2 { color:#00d4ff; margin-bottom:10px; text-align:left; }
+        .modal .close { background:none; border:none; color:#00d4ff; font-size:1.2em; cursor:pointer; float:right; }
+        .resource-list { margin-top:8px; display:grid; grid-template-columns: 1fr 1fr; gap:10px; }
+        .resource-item a { color:#00ff88; text-decoration:none; border-bottom:1px dashed rgba(0,255,136,.4); }
+        .resource-item a:hover { color:#b4ffe0; }
+
+        /* Chapters modal */
+        .chapters-btn { background: linear-gradient(135deg, #b19cd9, #00d4ff); color:#0a0e27; border:none; padding:10px 14px; border-radius:10px; font-weight:700; cursor:pointer; }
+        .chapters-backdrop { position: fixed; inset: 0; background: rgba(5,10,30,0.7); display: none; align-items: center; justify-content: center; z-index: 1000; }
+        .chapters-modal { width: min(920px, 92vw); max-height: 86vh; overflow:auto; background: radial-gradient(1200px 400px at 50% -20%, #132038, #0b0f25); border:1px solid rgba(0,212,255,0.25); border-radius:16px; box-shadow: 0 20px 60px rgba(0,0,0,0.6); padding: 20px 24px; position: relative; }
+        .chapters-header { display:flex; justify-content:space-between; align-items:center; gap:12px; padding-bottom:10px; border-bottom:1px solid rgba(0,212,255,0.2); }
+        .chapters-title { font-size: 1.4em; color:#00d4ff; font-weight:800; letter-spacing:0.5px; }
+        .chapters-close { background:none; border:none; color:#00d4ff; font-size:1.6em; cursor:pointer; line-height:1; padding:6px; }
+        .planet-grid { display:grid; grid-template-columns: repeat(4, minmax(140px, 1fr)); gap:16px; padding: 16px 6px 6px; }
+        .planet-card { background: linear-gradient(180deg, rgba(0,212,255,0.08), rgba(0,255,136,0.06)); border:1px solid rgba(0,212,255,0.25); border-radius:14px; padding:14px; cursor:pointer; transition: transform .2s, box-shadow .2s, border-color .2s; display:flex; align-items:center; gap:12px; }
+        .planet-card:hover { transform: translateY(-3px); border-color:#00d4ff; box-shadow: 0 8px 24px rgba(0,212,255,0.2); }
+        .planet-ico { width:38px; height:38px; border-radius:50%; background: radial-gradient(circle at 30% 30%, #fff 8%, #ffd54d 18%, #ff9800 50%, #e65100 90%); box-shadow: 0 0 18px rgba(255, 208, 0, 0.4) }
+        .planet-ico.mercury{ background: radial-gradient(circle at 30% 30%, #eee 10%, #bbb 50%, #888 100%);} 
+        .planet-ico.venus{ background: radial-gradient(circle at 30% 30%, #fff3, #ffcc80 30%, #fb8c00 80%);} 
+        .planet-ico.earth{ background: radial-gradient(circle at 30% 30%, #9ee 5%, #2196f3 35%, #2ecc71 70%, #0a2342 95%);} 
+        .planet-ico.mars{ background: radial-gradient(circle at 30% 30%, #ffcdd2 5%, #e57373 35%, #b71c1c 85%);} 
+        .planet-ico.jupiter{ background: radial-gradient(circle at 30% 30%, #fff 5%, #ffcc80 30%, #a1887f 70%, #6d4c41 95%);} 
+        .planet-ico.saturn{ background: radial-gradient(circle at 30% 30%, #fff 5%, #ffe082 30%, #d4a373 80%);} 
+        .planet-ico.uranus{ background: radial-gradient(circle at 30% 30%, #e0ffff 5%, #80deea 40%, #26c6da 90%);} 
+        .planet-ico.neptune{ background: radial-gradient(circle at 30% 30%, #e3f2fd 5%, #64b5f6 40%, #1e3a8a 90%);} 
+        .chapter-label { display:flex; flex-direction:column; }
+        .chapter-name { color:#e0f7fa; font-weight:700; line-height:1.2; }
+        .chapter-sub { color:#9bd; font-size:.85em; }
+    </style>
+</head>
+<body>
+    <canvas id="spaceCanvas" class="three-bg-canvas" aria-hidden="true"></canvas>
+    <header class="site-header" role="banner">
+        <div class="bar">
+            <div class="brand" aria-label="Site brand">
+                <div class="brand-badge" aria-hidden="true"></div>
+                <div class="brand-text">Nova • Space Weather Stories</div>
+            </div>
+            <nav class="nav-links" aria-label="Primary">
+                <button id="navHome" class="nav-btn" aria-label="Home">Home</button>
+                <button id="navChapters" class="nav-btn" aria-haspopup="dialog" aria-controls="chaptersModal">Chapters</button>
+                <button id="navResources" class="nav-btn" aria-haspopup="dialog" aria-controls="resourcesModal">Resources</button>
+                <button id="navAbout" class="nav-btn" aria-haspopup="dialog" aria-controls="aboutModal">About</button>
+                <button id="toggle3D" class="nav-btn" aria-pressed="true">Pause 3D</button>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="title-screen" id="titleScreen">
+            <div class="stars" id="starsContainer"></div>
+            <h1>Nova's Aurora Adventure</h1>
+            <p class="subtitle">A Space Weather Photographer's Tale</p>
+            
+            <div class="nova-avatar">
+                <div class="nova-head">
+                    <div class="nova-hair">
+                        <div class="nova-ponytail"></div>
+                    </div>
+                    <div class="nova-eyes">
+                        <div class="nova-eye"></div>
+                        <div class="nova-eye"></div>
+                    </div>
+                    <div class="nova-smile"></div>
+                </div>
+                <div class="nova-body"></div>
+                <div class="nova-arms">
+                    <div class="nova-arm nova-arm-left"></div>
+                    <div class="nova-arm nova-arm-right"></div>
+                </div>
+                <div class="nova-legs">
+                    <div class="nova-leg nova-leg-left"></div>
+                    <div class="nova-leg nova-leg-right"></div>
+                </div>
+                <div class="nova-camera">
+                    <div class="camera-lens-small"></div>
+                </div>
+            </div>
+            
+            <button class="start-btn" onclick="startStory()">Begin Journey 📸</button>
+        </div>
+
+        <div id="storyContent" class="hidden">
+            <div class="pager" id="pager" aria-label="Story navigation">
+                <button id="prev" class="btn" aria-label="Previous">← Prev</button>
+                <div class="dots" id="dots" role="tablist" aria-label="Pages"></div>
+                <div class="controls-bar-inline">
+                    <button id="chaptersBtn" class="chapters-btn" aria-haspopup="dialog" aria-controls="chaptersModal">☰ Chapters</button>
+                    <button id="playBtn" class="btn" aria-pressed="false">▶ Play</button>
+                </div>
+                <button id="next" class="btn" aria-label="Next">Next →</button>
+            </div>
+            <div class="scene">
+                <div class="nova-avatar">
+                    <div class="nova-head">
+                        <div class="nova-hair">
+                            <div class="nova-ponytail"></div>
+                        </div>
+                        <div class="nova-eyes">
+                            <div class="nova-eye"></div>
+                            <div class="nova-eye"></div>
+                        </div>
+                        <div class="nova-smile"></div>
+                    </div>
+                    <div class="nova-body"></div>
+                    <div class="nova-arms">
+                        <div class="nova-arm nova-arm-left"></div>
+                        <div class="nova-arm nova-arm-right"></div>
+                    </div>
+                    <div class="nova-legs">
+                        <div class="nova-leg nova-leg-left"></div>
+                        <div class="nova-leg nova-leg-right"></div>
+                    </div>
+                    <div class="nova-camera">
+                        <div class="camera-lens-small"></div>
+                    </div>
+                </div>
+                
+                <h2><span class="scene-number">Scene 1</span>Meet Nova Chen: The Aurora Hunter</h2>
+                <p>
+                    "Hi! I'm Nova Chen, and I'm 12 years old. I live in Fairbanks, Alaska, where the winter nights are so long and dark that sometimes I feel like I'm living on another planet. But that's exactly why I love it here!"
+                </p>
+                <p>
+                    Nova's room tells the story of her passion. Aurora photographs cover every wall—some showing brilliant green curtains dancing across the sky, others capturing rare red and purple lights that only appear during the strongest space weather storms. Her desk holds her most prized possessions: a sturdy tripod she calls "Steady Eddie" and her camera "Iris," both essential tools for capturing the night sky's magic.
+                </p>
+                <p>
+                    <strong>Nova's Story:</strong> "When I was seven, my dad took me outside during my first aurora show. I was scared of the dark, but when those lights started dancing above us, I forgot everything else. That's when I knew I wanted to be a photographer—not just any photographer, but someone who captures space weather in action!"
+                </p>
+
+                <div class="illustration" style="padding:16px;">
+                    <h2 style="text-align:center; margin-bottom:12px;"><span class="scene-number">Scene 1</span> Aurora Time-Lapse</h2>
+                    <p style="margin-bottom:12px;">
+                        Nova sets up her camera to capture a time‑lapse of the aurora dancing in the sky. Here’s a short clip of what she sees through her lens:
+                    </p>
+                    <video controls width="100%" poster="thumbnail.jpg" style="border-radius:10px; background:#000;">
+                        <source src="https://res.cloudinary.com/drc1ded2t/video/upload/v1759294242/Aurora_Adventures_2_zbdbut.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+            </div>
+            <!-- Chapters Modal -->
+            <div id="chaptersBackdrop" class="chapters-backdrop" role="presentation" aria-hidden="true">
+                <div id="chaptersModal" class="chapters-modal" role="dialog" aria-modal="true" aria-labelledby="chaptersTitle" tabindex="-1">
+                    <div class="chapters-header">
+                        <div id="chaptersTitle" class="chapters-title">Choose a Chapter</div>
+                        <button id="chaptersClose" class="chapters-close" aria-label="Close chapters">✕</button>
+                    </div>
+                    <div id="chaptersGrid" class="planet-grid" role="list"></div>
+                </div>
+            </div>
+
+            <!-- Resources Modal -->
+            <div id="resourcesBackdrop" class="modal-backdrop" role="presentation" aria-hidden="true">
+                <div id="resourcesModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="resourcesTitle" tabindex="-1">
+                    <button id="resourcesClose" class="close" aria-label="Close resources">✕</button>
+                    <h2 id="resourcesTitle">Space Weather Resources</h2>
+                    <div class="resource-list">
+                        <div class="resource-item"><a href="https://www.swpc.noaa.gov/" target="_blank" rel="noopener">NOAA Space Weather Prediction Center</a></div>
+                        <div class="resource-item"><a href="https://science.nasa.gov/heliophysics/space-weather/" target="_blank" rel="noopener">NASA Space Weather</a></div>
+                        <div class="resource-item"><a href="https://sdo.gsfc.nasa.gov/" target="_blank" rel="noopener">NASA Solar Dynamics Observatory</a></div>
+                        <div class="resource-item"><a href="https://www.asc-csa.gc.ca/eng/space-weather/" target="_blank" rel="noopener">CSA Space Weather Canada</a></div>
+                        <div class="resource-item"><a href="https://www2.inpe.br/climaespacial/en/" target="_blank" rel="noopener">AEB/INPE EMBRACE Program</a></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- About Modal -->
+            <div id="aboutBackdrop" class="modal-backdrop" role="presentation" aria-hidden="true">
+                <div id="aboutModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="aboutTitle" tabindex="-1">
+                    <button id="aboutClose" class="close" aria-label="Close about">✕</button>
+                    <h2 id="aboutTitle">About Nova's Space Weather Stories</h2>
+                    <p>
+                        An educational, NASA-inspired interactive storybook about space weather told through Nova, a young aurora photographer. Explore chapters, watch short clips, and learn how solar activity affects life on Earth.
+                    </p>
+                    <p>
+                        Built with semantic HTML, accessible controls, and playful space visuals. Data concepts include the Kp index, CMEs, solar flares, and real-world impacts on GPS, radio, satellites, and power grids.
+                    </p>
+                </div>
+            </div>
+
+            <div class="scene">
+                <div class="nova-avatar nova-thinking">
+                    <div class="nova-head">
+                        <div class="nova-hair">
+                            <div class="nova-ponytail"></div>
+                        </div>
+                        <div class="nova-eyes">
+                            <div class="nova-eye"></div>
+                            <div class="nova-eye"></div>
+                        </div>
+                        <div class="nova-smile"></div>
+                        <div class="thought-bubble">🌞➡️🌍</div>
+                    </div>
+                    <div class="nova-body"></div>
+                    <div class="nova-arms">
+                        <div class="nova-arm nova-arm-left"></div>
+                        <div class="nova-arm nova-arm-right"></div>
+                    </div>
+                    <div class="nova-legs">
+                        <div class="nova-leg nova-leg-left"></div>
+                        <div class="nova-leg nova-leg-right"></div>
+                    </div>
+                </div>
+                
+                <h2><span class="scene-number">Scene 2</span>The Sun's Secret Language</h2>
+                <div class="illustration space-weather-diagram">
+                    <div class="sun-icon"></div>
+                    <div class="wave-path">
+                        <div class="particle"></div>
+                        <div class="particle" style="animation-delay: 0.5s;"></div>
+                        <div class="particle" style="animation-delay: 1s;"></div>
+                    </div>
+                    <div class="earth-icon">
+                        <div class="magnetosphere"></div>
+                    </div>
+                </div>
+                <div class="info-box">
+                    <h3>🌌 Space Weather: The Sun's Messages to Earth</h3>
+                    <p>
+                        <strong>Space weather</strong> is like the Sun's way of talking to Earth! Just like we have rain, wind, and sunshine on Earth, space has its own "weather" created by the Sun's constant activity. The Sun isn't just a steady light—it's a giant, churning ball of energy that constantly sends particles and radiation toward Earth.
+                    </p>
+                </div>
+
+                <div class="illustration" style="padding:16px;">
+                    <h2 style="text-align:center; margin-bottom:12px;"><span class="scene-number">Scene 2</span> Space Weather in Action</h2>
+                    <p style="margin-bottom:12px;">
+                        Watch how space weather particles travel from the Sun to Earth, creating the conditions for auroras:
+                    </p>
+                    <video controls width="100%" poster="thumbnail.jpg" style="border-radius:10px; background:#000;">
+                        <source src="https://res.cloudinary.com/drc1ded2t/video/upload/v1759299540/Sun_s_Cosmic_Chat_jytqrt.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+
+                <p>
+                    "My dad works at the Geophysical Institute, and he taught me that space weather is like a conversation between the Sun and Earth," Nova explains, pointing to the diagram. "The Sun sends three types of messages: solar flares (like sudden shouts), coronal mass ejections or CMEs (like sending huge packages), and solar wind (like a constant whisper)."
+                </p>
+                <p>
+                    Nova's eyes light up as she continues: "When these space weather messages reach Earth, they don't just disappear. They interact with our planet's magnetic field—like Earth's invisible shield—and that's when the magic happens! The particles get funneled toward the poles, and that's what creates the auroras I love to photograph!"
+                </p>
+                <p>
+                    <strong>Nova's Discovery:</strong> "I used to think auroras were just pretty lights. But now I know they're actually Earth's way of showing us that space weather is happening! Every aurora photo I take is a snapshot of this incredible cosmic conversation."
+                </p>
+            </div>
+
+            <div class="scene">
+                <h2><span class="scene-number">Scene 3</span>Nova's Space Weather Journal</h2>
+                <div class="illustration flare-diagram">
+                    <div class="flare-types">
+                        <div class="flare-card">
+                            <div class="flare-icon">⚡</div>
+                            <h3>Solar Flares</h3>
+                            <p><strong>Speed:</strong> Light speed (8 minutes to Earth)<br><strong>Impact:</strong> Radio blackouts, GPS glitches<br><strong>Nova's Note:</strong> "Like the Sun's emergency alerts!"</p>
+                        </div>
+                        <div class="flare-card">
+                            <div class="flare-icon">☁️</div>
+                            <h3>CMEs</h3>
+                            <p><strong>Speed:</strong> 15 hours to 3 days<br><strong>Impact:</strong> Beautiful auroras, power grid stress<br><strong>Nova's Note:</strong> "These create the best photo opportunities!"</p>
+                        </div>
+                        <div class="flare-card">
+                            <div class="flare-icon">🌊</div>
+                            <h3>Solar Wind</h3>
+                            <p><strong>Speed:</strong> Constant flow<br><strong>Impact:</strong> Always present, shapes Earth's magnetosphere<br><strong>Nova's Note:</strong> "The background music of space!"</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="illustration" style="padding:16px;">
+                    <h2 style="text-align:center; margin-bottom:12px;"><span class="scene-number">Scene 3</span> Solar Flares, CMEs & Solar Wind</h2>
+                    <p style="margin-bottom:12px;">
+                        See the different types of space weather phenomena and how they travel from the Sun:
+                    </p>
+                    <video controls width="100%" poster="thumbnail.jpg" style="border-radius:10px; background:#000;">
+                        <source src="https://res.cloudinary.com/drc1ded2t/video/upload/v1759301058/Nova_s_Space_Weather_uz7q9x.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+
+                <p>
+                    "I keep a detailed journal of every space weather event," Nova says, flipping through pages filled with drawings and notes. "Each type of space weather is like a different character in my story. Solar flares are the quick, dramatic ones—they arrive in just 8 minutes and can mess up radio signals. CMEs are the slow giants that take days to reach us, but when they do, they create the most amazing auroras!"
+                </p>
+                <p>
+                    <strong>Nova's Challenge:</strong> "The tricky part is that space weather affects everyone differently. While I'm excited about auroras, pilots have to worry about radio blackouts, and power companies have to protect their grids. It's like one big space weather story with different chapters for different people!"
+                </p>
+            </div>
+
+            <div class="scene">
+                <h2><span class="scene-number">Scene 4</span>Nova's Space Weather Command Center</h2>
+                <div class="illustration forecast-screen">
+                    <div class="forecast-panel">
+                        <h3 style="color: #00d4ff; text-align: center; margin-bottom: 20px;">🌟 Nova's Aurora Forecast Dashboard</h3>
+                        <p style="text-align: center; margin-bottom: 15px;"><strong>Kp Index:</strong> The "Aurora Scale" (0-9) - Higher numbers = Better auroras!</p>
+                        <div class="kp-meter">
+                            <div class="kp-indicator"></div>
+                        </div>
+                        <p style="text-align: center; margin-top: 15px; font-size: 0.95em;">
+                            🟢 Quiet (0-3) | 🟡 Active (4-5) | 🟠 Storm (6-7) | 🔴 Major Storm (8-9)
+                        </p>
+                    </div>
+                </div>
+
+                <div class="illustration" style="padding:16px;">
+                    <h2 style="text-align:center; margin-bottom:12px;"><span class="scene-number">Scene 4</span> Forecast Tools in Action</h2>
+                    <p style="margin-bottom:12px;">
+                        See how Nova uses forecasts like the Kp index and solar wind data to plan her shots:
+                    </p>
+                    <video controls width="100%" poster="thumbnail.jpg" style="border-radius:10px; background:#000;">
+                        <source src="https://res.cloudinary.com/drc1ded2t/video/upload/v1759313808/Aurora_Hunter_Nova_uiywq5.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+                <p>
+                    "Every evening, I turn my room into a space weather command center!" Nova laughs, showing her setup. "I check NASA's Space Weather Prediction Center, NOAA's aurora forecasts, and my favorite aurora apps. It's like being a weather forecaster, but for space!"
+                </p>
+                <p>
+                    <strong>Nova's Prediction Process:</strong> "I look for Kp index values above 4—that's when things get exciting! I also check for solar wind speed and density. When I see a CME heading our way, I know I need to be ready. Sometimes I even set alarms for 2 AM if the forecast looks promising!"
+                </p>
+            </div>
+
+            <div class="scene">
+                <h2><span class="scene-number">Scene 5</span>Nova's Mission Preparation</h2>
+                <div class="gear-list">
+                    <h3 style="color: #00ff88; margin-bottom: 20px;">📋 Nova's Aurora Mission Checklist</h3>
+                    <div class="checklist-item">
+                        <div class="checkbox">✓</div>
+                        <span><strong>Camera gear:</strong> Iris (my DSLR), wide-angle lens, 3 extra memory cards</span>
+                    </div>
+                    <div class="checklist-item">
+                        <div class="checkbox">✓</div>
+                        <span><strong>Tripod:</strong> Steady Eddie (essential for 15-second exposures!)</span>
+                    </div>
+                    <div class="checklist-item">
+                        <div class="checkbox">✓</div>
+                        <span><strong>Battery survival kit:</strong> 6 spares + hand warmers (Alaska cold is brutal!)</span>
+                    </div>
+                    <div class="checklist-item">
+                        <div class="checkbox">✓</div>
+                        <span><strong>Safety team:</strong> Dad + emergency beacon (never go alone!)</span>
+                    </div>
+                    <div class="checklist-item">
+                        <div class="checkbox">✓</div>
+                        <span><strong>Space weather data:</strong> Latest Kp index, solar wind readings</span>
+                    </div>
+                </div>
+
+                <div class="illustration" style="padding:16px;">
+                    <h2 style="text-align:center; margin-bottom:12px;"><span class="scene-number">Scene 5</span> Packing for the Perfect Aurora</h2>
+                    <p style="margin-bottom:12px;">
+                        A quick look at Nova's prep and gear before heading out to chase auroras:
+                    </p>
+                    <video controls width="100%" poster="thumbnail.jpg" style="border-radius:10px; background:#000;">
+                        <source src="https://res.cloudinary.com/drc1ded2t/video/upload/v1759321747/Aurora_Hunter_Nova_1_c4dkey.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+                <p>
+                    "Aurora photography isn't just about taking pretty pictures," Nova explains while packing her gear. "It's about understanding space weather and being prepared for anything. The auroras don't wait for you to get ready—they happen when space weather conditions are right, and you have to be there!"
+                </p>
+                <p>
+                    <strong>Nova's Secret:</strong> "I always check the space weather data before I go out. If the Kp index is high and there's a CME coming, I know I might see something amazing. But I also know that the same space weather that creates beautiful auroras can mess up GPS and radio signals—so I always have backup plans!"
+                </p>
+            </div>
+
+            <div class="scene">
+                <h2><span class="scene-number">Scene 6</span>When Space Weather Messes with GPS</h2>
+                <div class="illustration gps-visual">
+                    <div class="satellite-grid">
+                        <div class="satellite"></div>
+                        <div class="satellite" style="animation-delay: 0.5s;"></div>
+                        <div class="satellite" style="animation-delay: 1s;"></div>
+                        <div class="satellite" style="animation-delay: 1.5s;"></div>
+                    </div>
+                    <div class="map-backup">🗺️</div>
+                </div>
+
+                <div class="illustration" style="padding:16px;">
+                    <h2 style="text-align:center; margin-bottom:12px;"><span class="scene-number">Scene 6</span> GPS Under Space Weather</h2>
+                    <p style="margin-bottom:12px;">
+                        Watch how geomagnetic storms can bend and delay GPS signals in the ionosphere:
+                    </p>
+                    <video controls width="100%" poster="thumbnail.jpg" style="border-radius:10px; background:#000;">
+                        <source src="https://res.cloudinary.com/drc1ded2t/video/upload/v1759313808/Aurora_Hunter_Nova_uiywq5.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+                <p>
+                    "This is something most people don't know about space weather," Nova says, holding up her phone showing a GPS app. "When strong geomagnetic storms hit Earth, they mess with the ionosphere—that's the layer of atmosphere where GPS signals travel. The signals get bent and delayed, making your GPS think you're in a different location!"
+                </p>
+                <p>
+                    <strong>Nova's Real Experience:</strong> "One time during a Kp 7 storm, my GPS told me I was 50 feet away from where I actually was! I was trying to find my favorite aurora spot, but the GPS kept leading me in circles. That's when I learned to always bring a paper map as backup."
+                </p>
+                <p>
+                    <strong>Why This Matters:</strong> "Pilots, delivery drivers, and even farmers rely on GPS. When space weather disrupts GPS signals, it can cause real problems. That's why understanding space weather isn't just about pretty auroras—it's about keeping our technology working!"
+                </p>
+            </div>
+
+            <div class="scene">
+                <h2><span class="scene-number">Scene 7</span>When Space Weather Silences the Airwaves</h2>
+
+                <div class="illustration" style="padding:16px;">
+                    <h2 style="text-align:center; margin-bottom:12px;"><span class="scene-number">Scene 7</span> Radio Blackouts Explained</h2>
+                    <p style="margin-bottom:12px;">
+                        See how solar flares can cause HF/VHF radio blackouts across regions during strong storms:
+                    </p>
+                    <video controls width="100%" poster="thumbnail.jpg" style="border-radius:10px; background:#000;">
+                        <source src="https://res.cloudinary.com/drc1ded2t/video/upload/v1759313808/Aurora_Hunter_Nova_uiywq5.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+                <p>
+                    "My dad always carries a handheld radio when we go aurora hunting," Nova explains, showing a radio with crackling static. "But during solar storms, something weird happens. The radio signals get completely messed up—they crackle, fade, or disappear entirely. It's called a radio blackout, and it's scary when you're out in the wilderness!"
+                </p>
+                <p>
+                    <strong>Nova's Scary Moment:</strong> "One night, we were at our favorite aurora spot when a massive solar flare hit. Our radio went completely silent—no static, nothing. We couldn't call for help if we needed it. That's when I realized how much we depend on technology that space weather can break!"
+                </p>
+                <p>
+                    <strong>Who Gets Affected:</strong> "Radio blackouts don't just affect aurora photographers. Pilots lose communication with air traffic control, ham radio operators can't talk to each other, and emergency services might have trouble coordinating. It's like space weather is playing a prank on all our technology!"
+                </p>
+                <p>
+                    <strong>Nova's Safety Solution:</strong> "Now we always have backup plans—offline meeting points, check-in times, and a satellite emergency beacon that works even when radio doesn't. Space weather taught me that being prepared means more than just having the right camera gear!"
+                </p>
+            </div>
+
+            <div class="scene">
+                <h2><span class="scene-number">Scene 8</span>Nova's Battery Battle with Space Weather</h2>
+                <div class="gear-list">
+                    <h3 style="color: #00ff88; margin-bottom: 20px;">🔋 Nova's Cold Weather Survival Kit</h3>
+                    <div class="checklist-item">
+                        <div class="checkbox">✓</div>
+                        <span><strong>Battery army:</strong> 6 spare batteries, all kept warm in jacket pockets</span>
+                    </div>
+                    <div class="checklist-item">
+                        <div class="checkbox">✓</div>
+                        <span><strong>Battery rotation:</strong> Swap cold camera battery with warm pocket battery every 30 minutes</span>
+                    </div>
+                    <div class="checklist-item">
+                        <div class="checkbox">✓</div>
+                        <span><strong>Hand warmer strategy:</strong> Wrap batteries in hand warmers for extra warmth</span>
+                    </div>
+                    <div class="checklist-item">
+                        <div class="checkbox">✓</div>
+                        <span><strong>Space weather timing:</strong> Check Kp index—stronger storms = longer shoots = more batteries needed!</span>
+                    </div>
+                </div>
+
+                <div class="illustration" style="padding:16px;">
+                    <h2 style="text-align:center; margin-bottom:12px;"><span class="scene-number">Scene 8</span> Cold-Weather Shooting</h2>
+                    <p style="margin-bottom:12px;">
+                        See how Nova keeps batteries warm and rotates gear to stay shooting in Arctic cold:
+                    </p>
+                    <video controls width="100%" poster="thumbnail.jpg" style="border-radius:10px; background:#000;">
+                        <source src="https://res.cloudinary.com/drc1ded2t/video/upload/v1759321747/Aurora_Hunter_Nova_1_c4dkey.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+                <p>
+                    "Alaska cold is brutal on camera batteries," Nova says, showing her collection of dead batteries. "But here's the thing—space weather makes it even worse! When there's a strong geomagnetic storm, the auroras can last for hours, and I need to be ready to shoot the whole time. One battery might only last 20 minutes in -20°F weather!"
+                </p>
+                <p>
+                    <strong>Nova's Pro Tips:</strong> "I've learned that space weather affects everything, even my camera gear. During strong storms, I might be out for 4-6 hours straight. My typical aurora settings are ISO 1600-3200, f/2.8 aperture, and 5-15 second exposures—but I need warm batteries to make it work!"
+                </p>
+                <p>
+                    <strong>The Space Weather Connection:</strong> "The stronger the space weather, the more amazing the auroras, but also the longer I need to be out there. It's like space weather is testing my preparation skills!"
+                </p>
+            </div>
+
+            <div class="scene">
+                <h2><span class="scene-number">Scene 9</span>The Night Everything Came Together</h2>
+                <div class="illustration aurora-show">
+                    <div class="aurora-waves">
+                        <div class="aurora-wave"></div>
+                        <div class="aurora-wave" style="top: 60px; animation-delay: 1s;"></div>
+                        <div class="aurora-wave" style="top: 120px; animation-delay: 2s; opacity: 0.7;"></div>
+                    </div>
+                    <div class="photographer-silhouette">
+                        <div class="nova-photographing">
+                            <div class="nova-avatar" style="transform: scale(0.7);">
+                                <div class="nova-head">
+                                    <div class="nova-hair">
+                                        <div class="nova-ponytail"></div>
+                                    </div>
+                                    <div class="nova-eyes">
+                                        <div class="nova-eye"></div>
+                                        <div class="nova-eye"></div>
+                                    </div>
+                                    <div class="nova-smile"></div>
+                                </div>
+                                <div class="nova-body"></div>
+                                <div class="nova-arms">
+                                    <div class="nova-arm nova-arm-left"></div>
+                                    <div class="nova-arm nova-arm-right"></div>
+                                </div>
+                                <div class="nova-legs">
+                                    <div class="nova-leg nova-leg-left"></div>
+                                    <div class="nova-leg nova-leg-right"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tripod-stand">
+                            <div class="tripod-leg"></div>
+                            <div class="tripod-leg"></div>
+                            <div class="tripod-leg"></div>
+                            <div class="camera-on-tripod"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="illustration" style="padding:16px;">
+                    <h2 style="text-align:center; margin-bottom:12px;"><span class="scene-number">Scene 9</span> Aurora Storm Night</h2>
+                    <p style="margin-bottom:12px;">
+                        Watch highlights from Nova's big Kp 7 night when the sky exploded with color:
+                    </p>
+                    <video controls width="100%" poster="thumbnail.jpg" style="border-radius:10px; background:#000;">
+                        <source src="https://res.cloudinary.com/drc1ded2t/video/upload/v1759321747/Aurora_Hunter_Nova_1_c4dkey.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+                <p>
+                    "Tonight was the night everything I learned about space weather came together!" Nova exclaims, her eyes still sparkling with excitement. "A massive CME had hit Earth's magnetosphere, and the Kp index jumped to 7—that's a major geomagnetic storm! I knew this was going to be special."
+                </p>
+                <p>
+                    <strong>The Magic Moment:</strong> "At Murphy Dome, the sky exploded with color! Brilliant green curtains swept across the sky, rippling and dancing like living curtains. Purple and pink edges appeared at the top, and the whole display lasted for over three hours. I took 300 photos that night!"
+                </p>
+                <p>
+                    <strong>Nova's Realization:</strong> "This is why I do this!" Nova whispers, looking at her camera. "Every aurora photo I take is a snapshot of space weather in action. The same solar storm that created this beautiful light show was also affecting GPS signals, radio communications, and power grids around the world. I'm not just photographing pretty lights—I'm documenting the Sun's conversation with Earth!"
+                </p>
+            </div>
+
+            <div class="scene">
+                <h2><span class="scene-number">Scene 10</span>The Ripple Effect: How One Storm Affects Everyone</h2>
+                <div class="impact-grid">
+                    <div class="impact-card">
+                        <span class="impact-emoji">✈️</span>
+                        <h3>Airline Pilots</h3>
+                        <p><strong>Nova's Story:</strong> "While I was photographing auroras, pilots flying over the Arctic had to reroute their flights. The same space weather that created my beautiful photos caused radio blackouts that made it dangerous to fly over the poles!"</p>
+                    </div>
+                    <div class="impact-card">
+                        <span class="impact-emoji">👨‍🚀</span>
+                        <h3>Astronauts on the ISS</h3>
+                        <p><strong>Nova's Story:</strong> "Astronauts on the International Space Station had to move to shielded modules and cancel their spacewalk. The radiation from the same solar storm that created my auroras was too dangerous for them to be outside!"</p>
+                    </div>
+                    <div class="impact-card">
+                        <span class="impact-emoji">⚡</span>
+                        <h3>Power Grid Operators</h3>
+                        <p><strong>Nova's Story:</strong> "Power companies were monitoring their grids extra carefully. The geomagnetic storm was creating electrical currents in power lines that could have caused blackouts. The same energy that made my auroras beautiful could have knocked out power for millions!"</p>
+                    </div>
+                    <div class="impact-card">
+                        <span class="impact-emoji">🛰️</span>
+                        <h3>Satellite Operators</h3>
+                        <p><strong>Nova's Story:</strong> "Communications satellites experienced glitches, and GPS accuracy decreased. The same space weather that created my amazing photos was messing with the technology that helps us navigate and communicate!"</p>
+                    </div>
+                </div>
+
+                <div class="illustration" style="padding:16px;">
+                    <h2 style="text-align:center; margin-bottom:12px;"><span class="scene-number">Scene 10</span> Storm Impacts Around Earth</h2>
+                    <p style="margin-bottom:12px;">
+                        See how one geomagnetic storm affects pilots, astronauts, power grids, and satellites:
+                    </p>
+                    <video controls width="100%" poster="thumbnail.jpg" style="border-radius:10px; background:#000;">
+                        <source src="https://res.cloudinary.com/drc1ded2t/video/upload/v1759321747/Aurora_Hunter_Nova_1_c4dkey.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+                <p>
+                    <strong>Nova's Big Realization:</strong> "That night, I realized something incredible. While I was out there photographing beautiful auroras, the same space weather event was affecting people and technology all around the world. We're all connected to the Sun in ways most people don't even realize!"
+                </p>
+                <p>
+                    <strong>The Space Weather Web:</strong> "Space weather is like a giant web that connects everyone on Earth. When the Sun sends us a message, it doesn't just create pretty lights—it affects pilots, astronauts, power grids, satellites, and even everyday people using GPS. Understanding space weather isn't just about science—it's about understanding how connected we all are!"
+                </p>
+            </div>
+
+            <div class="scene">
+                <h2><span class="scene-number">Scene 11</span>Nova's Mission: Teaching Through Photography</h2>
+                <div class="illustration photo-gallery">
+                    <h3 style="color: #00ff88; text-align: center; margin-bottom: 20px;">Nova's Space Weather Photo Gallery</h3>
+                    <div class="gallery-grid">
+                        <div class="photo-frame">📷</div>
+                        <div class="photo-frame">🌌</div>
+                        <div class="photo-frame">✨</div>
+                        <div class="photo-frame">🌠</div>
+                        <div class="photo-frame">💚</div>
+                        <div class="photo-frame">💜</div>
+                    </div>
+                </div>
+
+                <div class="illustration" style="padding:16px;">
+                    <h2 style="text-align:center; margin-bottom:12px;"><span class="scene-number">Scene 11</span> Sharing the Science</h2>
+                    <p style="margin-bottom:12px;">
+                        Nova explains the space weather behind her photos: Kp index, CMEs, and impacts:
+                    </p>
+                    <video controls width="100%" poster="thumbnail.jpg" style="border-radius:10px; background:#000;">
+                        <source src="https://res.cloudinary.com/drc1ded2t/video/upload/v1759321747/Aurora_Hunter_Nova_1_c4dkey.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+                <p>
+                    "Back home, I spent hours editing my 300 photos from that amazing night," Nova says, showing her computer screen filled with aurora images. "But I don't just post pretty pictures on social media. I tell the <strong>space weather story</strong> behind each photo!"
+                </p>
+                <p>
+                    <strong>Nova's Educational Mission:</strong> "For every aurora photo I share, I explain the science behind it. I tell people about the CME that created it, what the Kp index was, and how the same space weather storm affected GPS, radio, and power grids. I want people to understand that auroras aren't just pretty—they're science in action!"
+                </p>
+                <p>
+                    <strong>Nova's Impact:</strong> "My photos have inspired my classmates to learn more about space weather. Some of them have even started checking aurora forecasts! I love that my photography can teach people about science and help them understand how connected we all are to the Sun."
+                </p>
+                <p>
+                    <strong>Nova's Dream:</strong> "I want to be a space weather photographer when I grow up—someone who uses photography to teach people about the Sun and how it affects our planet. Every aurora photo is a chance to share the amazing story of space weather!"
+                </p>
+            </div>
+
+            <div class="scene">
+                <div class="nova-avatar">
+                    <div class="nova-head">
+                        <div class="nova-hair">
+                            <div class="nova-ponytail"></div>
+                        </div>
+                        <div class="nova-eyes">
+                            <div class="nova-eye"></div>
+                            <div class="nova-eye"></div>
+                        </div>
+                        <div class="nova-smile"></div>
+                    </div>
+                    <div class="nova-body"></div>
+                    <div class="nova-arms">
+                        <div class="nova-arm nova-arm-left"></div>
+                        <div class="nova-arm nova-arm-right"></div>
+                    </div>
+                    <div class="nova-legs">
+                        <div class="nova-leg nova-leg-left"></div>
+                        <div class="nova-leg nova-leg-right"></div>
+                    </div>
+                    <div class="nova-camera">
+                        <div class="camera-lens-small"></div>
+                    </div>
+                </div>
+                
+                <h2><span class="scene-number">Scene 12</span>Nova's Call to Action: The Sun's Story Continues</h2>
+                <div class="illustration" style="padding:16px;">
+                    <h2 style="text-align:center; margin-bottom:12px;"><span class="scene-number">Scene 12</span> Keep Watching the Sun</h2>
+                    <p style="margin-bottom:12px;">
+                        A closing message from Nova about the solar cycle and why we track space weather:
+                    </p>
+                    <video controls width="100%" poster="thumbnail.jpg" style="border-radius:10px; background:#000;">
+                        <source src="https://res.cloudinary.com/drc1ded2t/video/upload/v1759321747/Aurora_Hunter_Nova_1_c4dkey.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+                <p>
+                    "My aurora photography journey is just beginning!" Nova says with excitement. "The Sun goes through an 11-year cycle, and we're approaching solar maximum—the most active period. That means more solar flares, more CMEs, and more amazing auroras to photograph!"
+                </p>
+                <div class="resources-box">
+                    <h3 style="color: #00d4ff; margin-bottom: 20px; text-align: center;">🔗 Nova's Space Weather Toolkit</h3>
+                    <div class="resource-item">
+                        <strong>NOAA Space Weather Prediction Center:</strong> Real-time forecasts and alerts
+                    </div>
+                    <div class="resource-item">
+                        <strong>NASA Space Weather:</strong> Educational resources and mission updates
+                    </div>
+                    <div class="resource-item">
+                        <strong>NASA Solar Dynamics Observatory:</strong> Live images of the Sun
+                    </div>
+                    <div class="resource-item">
+                        <strong>Aurora Apps:</strong> "My Aurora Forecast" and "Aurora Alert"
+                    </div>
+                </div>
+                <p>
+                    <strong>Nova's Message to Students:</strong> "Space weather isn't just something that happens far away in space. It affects satellites, power grids, GPS, radio, and creates the most beautiful natural light show on Earth! Understanding space weather helps us prepare for its impacts and appreciate the amazing connection between the Sun and our planet."
+                </p>
+                <p>
+                    <strong>Nova's Challenge:</strong> "I challenge you to start watching the Sun! Check space weather forecasts, learn about solar cycles, and if you're lucky enough to live where you can see auroras, go out and experience this amazing natural phenomenon. Every aurora is a reminder that we're all connected to the Sun!"
+                </p>
+                <p style="text-align: center; font-size: 1.4em; color: #00ff88; margin-top: 50px;">
+                    ✨ Keep watching the Sun, keep chasing the lights, and keep learning! ✨
+                </p>
+                <p style="text-align: center; font-size: 1.1em; margin-top: 30px;">
+                    <strong>Nova's Aurora Adventure</strong><br>
+                    A Space Weather Photographer's Tale
+                </p>
+            </div>
+        </div>
+    </div>
+
+    
+
+    <script>
+        function createStars() {
+            const container = document.getElementById('starsContainer');
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                const size = Math.random() * 3 + 1;
+                star.style.width = size + 'px';
+                star.style.height = size + 'px';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                container.appendChild(star);
+            }
+        }
+
+        function startStory() {
+            document.getElementById('titleScreen').style.display = 'none';
+            document.getElementById('storyContent').classList.remove('hidden');
+            window.scrollTo(0, 0);
+        }
+
+        createStars();
+
+        // Pagination: one scene per page, autoplay ~30s, narration and captions
+        const scenes = Array.from(document.querySelectorAll('#storyContent .scene'));
+        const prevBtn = document.getElementById('prev');
+        const nextBtn = document.getElementById('next');
+        const dotsEl = document.getElementById('dots');
+        const playBtn = document.getElementById('playBtn');
+        const chaptersBtn = document.getElementById('chaptersBtn');
+        const chaptersBackdrop = document.getElementById('chaptersBackdrop');
+        const chaptersModal = document.getElementById('chaptersModal');
+        const chaptersClose = document.getElementById('chaptersClose');
+        const chaptersGrid = document.getElementById('chaptersGrid');
+        
+        let idx = 0; let playing=false; let timer=null; let speaking=false;
+
+        // Build dots
+        scenes.forEach((_, i) => {
+            const d = document.createElement('span');
+            d.className = 'dot';
+            d.role = 'tab';
+            d.ariaLabel = 'Page ' + (i+1);
+            d.addEventListener('click', () => go(i));
+            dotsEl.appendChild(d);
+        });
+
+        function update() {
+            scenes.forEach((s, i) => { s.style.display = i === idx ? '' : 'none'; });
+            const dots = Array.from(dotsEl.children);
+            dots.forEach((d, i) => { if (i === idx) d.setAttribute('aria-current','page'); else d.removeAttribute('aria-current'); });
+            prevBtn.disabled = idx === 0; nextBtn.disabled = idx === scenes.length - 1;
+            
+        }
+        function getSceneText(s){ return Array.from(s.querySelectorAll('p')).map(p=>p.innerText.trim()).join(' ').slice(0, 1500); }
+        function go(n){ idx = Math.max(0, Math.min(scenes.length-1, n)); clearTimers(); update(); if(playing) playCurrent(); }
+        function clearTimers(){ if(timer){ clearTimeout(timer); timer=null; } }
+        async function playCurrent(){ scenes[idx].scrollIntoView({behavior:'smooth', block:'start'}); timer=setTimeout(()=>{ if(idx < scenes.length-1){ go(idx+1); } else { togglePlay(false); } }, 30000); }
+        function togglePlay(on){ playing = (on!==undefined? on : !playing); playBtn.textContent = playing? '⏸ Pause' : '▶ Play'; playBtn.setAttribute('aria-pressed', String(playing)); clearTimers(); if(playing){ if(document.getElementById('storyContent').classList.contains('hidden')) startStory(); playCurrent(); } }
+
+        // Init: show only first scene when story opens
+        update();
+
+        prevBtn.addEventListener('click', () => go(idx-1));
+        nextBtn.addEventListener('click', () => go(idx+1));
+        playBtn.addEventListener('click', () => togglePlay());
+        document.addEventListener('keydown', (e) => { if(e.key==='ArrowRight') go(idx+1); else if(e.key==='ArrowLeft') go(idx-1); else if(/^[1-9]$/.test(e.key)) go(Number(e.key)-1); });
+
+        // Chapters modal logic
+        const planetIcos = ['mercury','venus','earth','mars','jupiter','saturn','uranus','neptune'];
+        function buildChapters(){
+            chaptersGrid.innerHTML = '';
+            scenes.forEach((scene, i) => {
+                const titleEl = scene.querySelector('h2');
+                const title = titleEl ? titleEl.textContent.trim() : `Scene ${i+1}`;
+                const card = document.createElement('button');
+                card.className = 'planet-card';
+                card.setAttribute('role','listitem');
+                card.setAttribute('aria-label', title);
+                card.addEventListener('click', () => { closeChapters(); go(i); scenes[i].scrollIntoView({behavior:'smooth'}); });
+                const ico = document.createElement('div');
+                ico.className = 'planet-ico ' + planetIcos[i % planetIcos.length];
+                const label = document.createElement('div');
+                label.className = 'chapter-label';
+                const name = document.createElement('div');
+                name.className = 'chapter-name';
+                name.textContent = `Chapter ${i+1}`;
+                const sub = document.createElement('div');
+                sub.className = 'chapter-sub';
+                sub.textContent = title.replace(/^Scene\s*\d+\s*/,'');
+                label.appendChild(name); label.appendChild(sub);
+                card.appendChild(ico); card.appendChild(label);
+                chaptersGrid.appendChild(card);
+            });
+        }
+        function openChapters(){ buildChapters(); chaptersBackdrop.style.display='flex'; chaptersBackdrop.removeAttribute('aria-hidden'); chaptersModal.focus(); }
+        function closeChapters(){ chaptersBackdrop.style.display='none'; chaptersBackdrop.setAttribute('aria-hidden','true'); }
+        chaptersBtn.addEventListener('click', openChapters);
+        chaptersClose.addEventListener('click', closeChapters);
+        chaptersBackdrop.addEventListener('click', (e)=>{ if(e.target === chaptersBackdrop) closeChapters(); });
+        document.addEventListener('keydown', (e)=>{ if(e.key==='Escape' && chaptersBackdrop.style.display==='flex') closeChapters(); });
+
+        // Site nav wiring
+        const navHome = document.getElementById('navHome');
+        const navChapters = document.getElementById('navChapters');
+        const navResources = document.getElementById('navResources');
+        const navAbout = document.getElementById('navAbout');
+        const resourcesBackdrop = document.getElementById('resourcesBackdrop');
+        const resourcesModal = document.getElementById('resourcesModal');
+        const resourcesClose = document.getElementById('resourcesClose');
+        const aboutBackdrop = document.getElementById('aboutBackdrop');
+        const aboutModal = document.getElementById('aboutModal');
+        const aboutClose = document.getElementById('aboutClose');
+
+        function openBackdrop(backdrop, modal){ backdrop.style.display='flex'; backdrop.removeAttribute('aria-hidden'); modal.focus(); }
+        function closeBackdrop(backdrop){ backdrop.style.display='none'; backdrop.setAttribute('aria-hidden','true'); }
+
+        navHome.addEventListener('click', () => { window.scrollTo({top:0, behavior:'smooth'}); });
+        navChapters.addEventListener('click', openChapters);
+        navResources.addEventListener('click', () => openBackdrop(resourcesBackdrop, resourcesModal));
+        navAbout.addEventListener('click', () => openBackdrop(aboutBackdrop, aboutModal));
+
+        resourcesClose.addEventListener('click', () => closeBackdrop(resourcesBackdrop));
+        resourcesBackdrop.addEventListener('click', (e)=>{ if(e.target===resourcesBackdrop) closeBackdrop(resourcesBackdrop); });
+        aboutClose.addEventListener('click', () => closeBackdrop(aboutBackdrop));
+        aboutBackdrop.addEventListener('click', (e)=>{ if(e.target===aboutBackdrop) closeBackdrop(aboutBackdrop); });
+        document.addEventListener('keydown', (e)=>{
+            if(e.key==='Escape'){
+                if(resourcesBackdrop.style.display==='flex') closeBackdrop(resourcesBackdrop);
+                if(aboutBackdrop.style.display==='flex') closeBackdrop(aboutBackdrop);
+            }
+        });
+
+        // Three.js 3D Background (stars + Earth + astronaut)
+        let threeEnabled = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        let renderer, scene3D, camera3D, animationId;
+        async function initThree(){
+            const canvas = document.getElementById('spaceCanvas');
+            // Lazy-load Three.js from CDN
+            if(!(window).THREE){
+                await new Promise((resolve)=>{
+                    const s=document.createElement('script'); s.src='https://unpkg.com/three@0.160.0/build/three.min.js'; s.onload=resolve; document.head.appendChild(s);
+                });
+            }
+            const THREE = (window).THREE;
+            renderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:true});
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+            scene3D = new THREE.Scene();
+            camera3D = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 0.1, 2000);
+            camera3D.position.set(0, 0, 28);
+
+            // Stars
+            const starGeo = new THREE.BufferGeometry();
+            const starCount = 2000;
+            const positions = new Float32Array(starCount * 3);
+            for(let i=0;i<starCount;i++){ positions[i*3+0]=(Math.random()-0.5)*800; positions[i*3+1]=(Math.random()-0.5)*800; positions[i*3+2]=(Math.random()-0.5)*800; }
+            starGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            const starMat = new THREE.PointsMaterial({color:0x88ccff, size:1.2, sizeAttenuation:true});
+            const stars = new THREE.Points(starGeo, starMat); scene3D.add(stars);
+
+            // Earth (simple sphere with spacey gradient)
+            const earthGeo = new THREE.SphereGeometry(6, 48, 48);
+            const earthMat = new THREE.MeshPhongMaterial({ color: 0x1a75ff, emissive:0x0a1a3a, shininess:30, specular:0x113366 });
+            const earth = new THREE.Mesh(earthGeo, earthMat); earth.position.set(-10, -4, -10); scene3D.add(earth);
+
+            // Astronaut (very simple kitbash: head + body)
+            const helmet = new THREE.Mesh(new THREE.SphereGeometry(1.2, 24, 24), new THREE.MeshStandardMaterial({color:0xffffff, metalness:0.1, roughness:0.4}));
+            const body = new THREE.Mesh(new THREE.BoxGeometry(1.6, 2.2, 1), new THREE.MeshStandardMaterial({color:0xdfe6f0, metalness:0.05, roughness:0.9}));
+            const astro = new THREE.Group();
+            helmet.position.y = 1.9; body.position.y = 0.6; astro.add(helmet); astro.add(body); astro.position.set(8, 2, -6); scene3D.add(astro);
+
+            // Lights
+            scene3D.add(new THREE.AmbientLight(0x668cff, 0.6));
+            const dir = new THREE.DirectionalLight(0xffffff, 0.8); dir.position.set(5,10,7); scene3D.add(dir);
+
+            function onResize(){ if(!renderer) return; camera3D.aspect = window.innerWidth/window.innerHeight; camera3D.updateProjectionMatrix(); renderer.setSize(window.innerWidth, window.innerHeight); }
+            window.addEventListener('resize', onResize);
+
+            const clock = new THREE.Clock();
+            function animate(){
+                const t = clock.getElapsedTime();
+                earth.rotation.y = t*0.03;
+                astro.rotation.y = Math.sin(t*0.5)*0.2;
+                stars.rotation.y = t*0.01; stars.rotation.x = t*0.005;
+                renderer.render(scene3D, camera3D);
+                animationId = requestAnimationFrame(animate);
+            }
+            animate();
+        }
+
+        async function startThree(){ if(threeEnabled){ try{ await initThree(); } catch(e){ console.warn('3D init failed', e); } } }
+        function stopThree(){ if(animationId){ cancelAnimationFrame(animationId); animationId=null; } if(renderer){ renderer.dispose(); renderer.forceContextLoss && renderer.forceContextLoss(); renderer.domElement && (renderer.domElement.width=0); renderer=null; } }
+
+        const toggle3D = document.getElementById('toggle3D');
+        toggle3D.addEventListener('click', async ()=>{ threeEnabled = !threeEnabled; toggle3D.textContent = threeEnabled ? 'Pause 3D' : 'Play 3D'; toggle3D.setAttribute('aria-pressed', String(threeEnabled)); if(threeEnabled) { await startThree(); } else { stopThree(); } });
+
+        startThree();
+    </script>
+</body>
+</html>

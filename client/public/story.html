@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nova's Aurora Adventure</title>
+    <!-- Embedded standalone story. This file was migrated from the original root index.html. -->
+    
+    <!-- BEGIN Original Styles and Markup -->
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #000000; color: #e0e0e0; line-height: 1.6; position: relative; overflow-x: hidden; }
+        .container { max-width: none; width: 100%; margin: 0 auto; padding: 0 20px; }
+        .title-screen { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; position: relative; overflow: hidden; background: rgba(0, 0, 0, 0.3); backdrop-filter: blur(2px); }
+        .stars { position: absolute; width: 100%; height: 100%; pointer-events: none; }
+        .star { position: absolute; background: white; border-radius: 50%; animation: twinkle 3s infinite ease-in-out; }
+        @keyframes twinkle { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+        h1 { font-size: 3.5em; margin-bottom: 10px; background: linear-gradient(135deg, #00ff88, #00d4ff, #b19cd9); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; z-index: 10; animation: titleGlow 3s ease-in-out infinite; }
+        @keyframes titleGlow { 0%, 100% { filter: drop-shadow(0 0 20px rgba(0, 255, 136, 0.4)); } 50% { filter: drop-shadow(0 0 40px rgba(0, 212, 255, 0.6)); } }
+        .subtitle { font-size: 1.5em; color: #00d4ff; margin-bottom: 40px; z-index: 10; }
+        .start-btn { 
+            background: linear-gradient(135deg, #00ff88 0%, #00d4ff 50%, #b19cd9 100%); 
+            color: #ffffff; 
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            padding: 16px 32px; 
+            font-size: 1em; 
+            font-weight: 700; 
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            border-radius: 40px; 
+            cursor: pointer; 
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            z-index: 10; 
+            box-shadow: 
+                0 8px 25px rgba(0, 212, 255, 0.3),
+                0 0 0 0 rgba(0, 255, 136, 0.2),
+                inset 0 2px 0 rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+            margin: 40px auto 20px;
+            display: inline-block;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        }
+        .start-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.6s;
+        }
+        .start-btn:hover { 
+            transform: translateY(-2px) scale(1.03); 
+            box-shadow: 
+                0 12px 30px rgba(0, 212, 255, 0.5),
+                0 0 20px rgba(0, 255, 136, 0.4),
+                inset 0 2px 0 rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+        .start-btn:hover::before {
+            left: 100%;
+        }
+        .start-btn:active {
+            transform: translateY(-1px) scale(1.02);
+            transition: all 0.1s ease;
+        }
+        .scene { background: rgba(26, 26, 46, 0.85); backdrop-filter: blur(15px); border-radius: 20px; padding: 50px; margin: 50px 0; border: 2px solid rgba(0, 212, 255, 0.3); opacity: 0; transform: translateY(30px); animation: fadeInUp 0.8s ease forwards; position: relative; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4); }
+        @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
+        .scene h2 { font-size: 2.5em; color: #00ff88; margin-bottom: 25px; text-align: center; }
+        .scene-number { display: inline-block; background: linear-gradient(135deg, #00ff88, #00d4ff); color: #0a0e27; padding: 8px 18px; border-radius: 20px; font-size: 0.6em; font-weight: bold; margin-right: 10px; }
+        .nova-avatar { width: 120px; height: 160px; position: relative; margin: 0 auto 30px; }
+        .nova-head { width: 60px; height: 60px; background: #f4c2a0; border-radius: 50%; position: absolute; top: 0; left: 50%; transform: translateX(-50%); animation: headBob 2s ease-in-out infinite; }
+        @keyframes headBob { 0%, 100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(-5px); } }
+        .nova-hair { width: 70px; height: 40px; background: #2a1810; border-radius: 50% 50% 20% 20%; position: absolute; top: -10px; left: 50%; transform: translateX(-50%); }
+        .nova-ponytail { width: 15px; height: 35px; background: #2a1810; border-radius: 0 0 50% 50%; position: absolute; top: 10px; left: 50%; transform: translateX(-50%) rotate(10deg); animation: ponytailSwing 2s ease-in-out infinite; }
+        @keyframes ponytailSwing { 0%, 100% { transform: translateX(-50%) rotate(10deg); } 50% { transform: translateX(-50%) rotate(-10deg); } }
+        .nova-eyes { display: flex; gap: 15px; position: absolute; top: 25px; left: 50%; transform: translateX(-50%); }
+        .nova-eye { width: 8px; height: 8px; background: #2a1810; border-radius: 50%; animation: blink 4s infinite; }
+        @keyframes blink { 0%, 48%, 52%, 100% { height: 8px; } 50% { height: 2px; } }
+        .nova-smile { width: 20px; height: 10px; border: 2px solid #2a1810; border-top: none; border-radius: 0 0 20px 20px; position: absolute; top: 40px; left: 50%; transform: translateX(-50%); }
+        .nova-body { width: 50px; height: 60px; background: linear-gradient(135deg, #4a90e2, #357abd); border-radius: 10px 10px 15px 15px; position: absolute; top: 55px; left: 50%; transform: translateX(-50%); }
+        .nova-arms { position: absolute; top: 65px; width: 100%; }
+        .nova-arm { width: 15px; height: 45px; background: #4a90e2; border-radius: 10px; position: absolute; }
+        .nova-arm-left { left: 10px; transform: rotate(-20deg); animation: armWaveLeft 2s ease-in-out infinite; }
+        @keyframes armWaveLeft { 0%, 100% { transform: rotate(-20deg); } 50% { transform: rotate(-40deg); } }
+        .nova-arm-right { right: 10px; transform: rotate(20deg); animation: armWaveRight 2s ease-in-out infinite; }
+        @keyframes armWaveRight { 0%, 100% { transform: rotate(20deg); } 50% { transform: rotate(40deg); } }
+        .nova-legs { position: absolute; top: 110px; width: 100%; }
+        .nova-leg { width: 18px; height: 40px; background: #2c5aa0; border-radius: 5px 5px 8px 8px; position: absolute; }
+        .nova-leg-left { left: 35px; }
+        .nova-leg-right { right: 35px; }
+        .nova-camera { width: 25px; height: 20px; background: #2a2a3e; border-radius: 5px; position: absolute; top: 90px; right: 15px; border: 2px solid #00d4ff; animation: cameraShake 3s ease-in-out infinite; }
+        @keyframes cameraShake { 0%, 90%, 100% { transform: rotate(0deg); } 92%, 96% { transform: rotate(-5deg); } 94%, 98% { transform: rotate(5deg); } }
+        .camera-lens-small { width: 10px; height: 10px; background: radial-gradient(circle, #00d4ff 30%, #1a1a3e 70%); border-radius: 50%; position: absolute; top: 5px; left: 7px; }
+        .illustration { width: 100%; min-height: 350px; border-radius: 15px; margin: 30px 0; position: relative; overflow: hidden; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5); }
+        .space-weather-diagram { background: linear-gradient(180deg, #0a0e27 0%, #1a1a3e 100%); display: flex; align-items: center; justify-content: space-around; padding: 40px; }
+        .sun-icon { width: 100px; height: 100px; background: radial-gradient(circle, #ffd700 0%, #ff8c00 70%); border-radius: 50%; animation: sunPulse 3s ease-in-out infinite; box-shadow: 0 0 50px rgba(255, 215, 0, 0.6); }
+        @keyframes sunPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+        .wave-path { width: 200px; height: 3px; background: linear-gradient(90deg, #ff8c00 0%, #00d4ff 100%); position: relative; }
+        .particle { width: 8px; height: 8px; background: #00ff88; border-radius: 50%; position: absolute; animation: particleMove 2s linear infinite; }
+        @keyframes particleMove { 0% { left: 0; opacity: 1; } 100% { left: 100%; opacity: 0; } }
+        .earth-icon { width: 90px; height: 90px; background: linear-gradient(135deg, #0066cc 0%, #00cc66 50%); border-radius: 50%; position: relative; box-shadow: 0 0 40px rgba(0, 212, 255, 0.4); animation: earthRotate 10s linear infinite; }
+        @keyframes earthRotate { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .magnetosphere { width: 120px; height: 120px; border: 3px dashed #00d4ff; border-radius: 50%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); animation: shieldPulse 2s ease-in-out infinite; }
+        @keyframes shieldPulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.8; } }
+        .flare-diagram { background: linear-gradient(180deg, #000 0%, #1a0033 100%); padding: 40px; }
+        .flare-types { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        .flare-card { background: rgba(255, 140, 0, 0.1); border: 2px solid rgba(255, 140, 0, 0.3); border-radius: 15px; padding: 25px; text-align: center; transition: transform 0.3s ease; }
+        .flare-card:hover { transform: translateY(-5px); background: rgba(255, 140, 0, 0.2); }
+        .flare-icon { font-size: 3em; margin-bottom: 15px; }
+        .forecast-screen { background: linear-gradient(135deg, #1a1a3e 0%, #0a0e27 100%); padding: 30px; }
+        .forecast-panel { background: rgba(0, 212, 255, 0.1); border: 2px solid #00d4ff; border-radius: 12px; padding: 25px; margin: 20px 0; }
+        .kp-meter { width: 100%; height: 40px; background: linear-gradient(90deg, #00ff88 0%, #ffd700 33%, #ff8c00 66%, #ff0000 100%); border-radius: 20px; position: relative; margin: 20px 0; }
+        .kp-indicator { width: 20px; height: 50px; background: white; border: 3px solid #0a0e27; position: absolute; top: -5px; left: 70%; animation: kpSlide 3s ease-in-out infinite; }
+        @keyframes kpSlide { 0%, 100% { left: 50%; } 50% { left: 75%; } }
+        .gear-list { background: rgba(0, 255, 136, 0.1); border-left: 5px solid #00ff88; padding: 25px; margin: 25px 0; border-radius: 10px; }
+        .checklist-item { display: flex; align-items: center; margin: 12px 0; font-size: 1.1em; }
+        .checkbox { width: 20px; height: 20px; border: 2px solid #00ff88; border-radius: 5px; margin-right: 15px; display: flex; align-items: center; justify-content: center; color: #00ff88; font-weight: bold; }
+        .gps-visual { background: linear-gradient(180deg, #0a0e27 0%, #1a1a3e 100%); padding: 40px; display: flex; justify-content: space-around; align-items: center; }
+        .satellite-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
+        .satellite { width: 50px; height: 50px; background: #00d4ff; clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%); animation: satelliteFloat 3s ease-in-out infinite; }
+        @keyframes satelliteFloat { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-10px) rotate(45deg); } }
+        .map-backup { width: 200px; height: 150px; background: #f4e6d8; border: 3px solid #8b6f47; border-radius: 5px; position: relative; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); display: flex; align-items: center; justify-content: center; font-size: 3em; }
+        .aurora-show { background: linear-gradient(180deg, #000 0%, #001a33 50%, #003366 100%); position: relative; min-height: 450px; }
+        .aurora-waves { position: absolute; width: 100%; height: 250px; top: 30px; }
+        .aurora-wave { position: absolute; width: 100%; height: 80px; background: linear-gradient(180deg, transparent 0%, rgba(0, 255, 136, 0.4) 30%, rgba(0, 212, 255, 0.4) 60%, rgba(177, 156, 217, 0.3) 80%, transparent 100%); animation: auroraFlow 5s ease-in-out infinite; }
+        @keyframes auroraFlow { 0%, 100% { transform: skewX(-8deg) translateX(0); opacity: 0.6; } 50% { transform: skewX(8deg) translateX(20px); opacity: 1; } }
+        .photographer-silhouette { position: absolute; bottom: 50px; left: 50%; transform: translateX(-50%); }
+        .nova-photographing { width: 100px; height: 130px; position: relative; }
+        .tripod-stand { width: 60px; height: 80px; position: absolute; bottom: 0; right: -40px; }
+        .tripod-leg { width: 3px; height: 70px; background: #333; position: absolute; bottom: 0; }
+        .tripod-leg:nth-child(1) { left: 20px; transform: rotate(-20deg); }
+        .tripod-leg:nth-child(2) { left: 30px; }
+        .tripod-leg:nth-child(3) { left: 40px; transform: rotate(20deg); }
+        .camera-on-tripod { width: 40px; height: 30px; background: #2a2a3e; border: 2px solid #00d4ff; border-radius: 5px; position: absolute; top: 0; left: 10px; }
+        .impact-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 25px; margin: 30px 0; }
+        .impact-card { background: rgba(255, 140, 0, 0.1); border: 2px solid rgba(255, 140, 0, 0.3); border-radius: 15px; padding: 30px; transition: transform 0.3s ease; }
+        .impact-card:hover { transform: translateY(-5px); background: rgba(255, 140, 0, 0.15); }
+        .impact-emoji { font-size: 3.5em; display: block; text-align: center; margin-bottom: 15px; }
+        .impact-card h3 { color: #00ff88; text-align: center; margin-bottom: 15px; font-size: 1.5em; }
+        .photo-gallery { background: linear-gradient(135deg, #1a1a3e 0%, #2d1b4e 100%); padding: 40px; }
+        .gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 30px 0; }
+        .photo-frame { aspect-ratio: 4/3; background: linear-gradient(135deg, #00ff88 0%, #00d4ff 50%, #b19cd9 100%); border-radius: 10px; position: relative; overflow: hidden; border: 3px solid rgba(0, 212, 255, 0.5); transition: transform 0.3s ease; display: flex; align-items: center; justify-content: center; font-size: 2em; animation: photoFade 8s ease-in-out infinite; }
+        @keyframes photoFade { 0%, 100% { opacity: 0.7; } 50% { opacity: 1; } }
+        .photo-frame:hover { transform: scale(1.05); box-shadow: 0 10px 30px rgba(0, 212, 255, 0.4); }
+        .resources-box { background: rgba(0, 212, 255, 0.1); border: 2px solid #00d4ff; border-radius: 15px; padding: 30px; margin: 30px 0; }
+        .resource-item { color: #00ff88; padding: 12px; margin: 8px 0; border-radius: 8px; font-size: 1.1em; }
+        p { font-size: 1.2em; margin-bottom: 20px; text-align: justify; }
+        .info-box { background: rgba(0, 212, 255, 0.1); border-left: 5px solid #00d4ff; padding: 25px; margin: 25px 0; border-radius: 10px; }
+        .info-box h3 { color: #00d4ff; margin-bottom: 15px; font-size: 1.5em; }
+        strong { color: #00ff88; }
+        .hidden { display: none; }
+        ul { margin-left: 30px; margin-top: 10px; }
+        li { margin-bottom: 10px; font-size: 1.1em; }
+        .nova-thinking .nova-head { animation: headThink 1s ease-in-out infinite; }
+        @keyframes headThink { 0%, 100% { transform: translateX(-50%) rotate(-5deg); } 50% { transform: translateX(-50%) rotate(5deg); } }
+        .thought-bubble { position: absolute; top: -60px; right: -80px; background: rgba(255, 255, 255, 0.9); color: #0a0e27; padding: 15px; border-radius: 20px; font-size: 2em; animation: bubbleFloat 2s ease-in-out infinite; }
+        @keyframes bubbleFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        .pager { display:flex; gap:10px; align-items:center; justify-content:space-between; position: sticky; top: 0; background: linear-gradient(180deg, #0a0e27cc, #1a1a2ecc); padding: 10px 0; backdrop-filter: blur(6px); border-bottom: 1px solid rgba(0,212,255,0.2); }
+        .pager .btn { background: linear-gradient(135deg, #00ff88, #00d4ff); color:#0a0e27; border:none; padding:10px 14px; border-radius:10px; font-weight:700; cursor:pointer; }
+        .pager .dots { display:flex; gap:6px; justify-content:center; flex:1; }
+        .pager .dot { width:10px; height:10px; border-radius:999px; background:#1a2252; border:1px solid #00d4ff; cursor:pointer; }
+        .pager .dot[aria-current="page"] { background:#00d4ff; box-shadow:0 0 0 4px rgba(0,212,255,0.2); }
+        .controls-bar-inline { display:flex; gap:10px; align-items:center; }
+        .video-background { 
+            position: fixed; 
+            top: 0;
+            left: 0;
+            width: 100vw; 
+            height: 100vh; 
+            z-index: -10; 
+            pointer-events: none;
+            overflow: hidden;
+        }
+        .video-background video { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            filter: brightness(0.5) contrast(1.2);
+            display: block;
+            min-width: 100%;
+            min-height: 100%;
+        }
+        .container, .site-header, .pager, .scene, .chapters-backdrop, .modal-backdrop { position: relative; z-index: 1; }
+        .site-header { position: sticky; top:0; z-index: 1200; background: linear-gradient(180deg, #04081acc, #0a1030cc); backdrop-filter: blur(8px); border-bottom: 1px solid rgba(0,212,255,0.2); }
+        .site-header .bar { max-width: 1200px; margin: 0 auto; display:flex; align-items:center; justify-content:space-between; padding: 10px 16px; }
+        .brand { display:flex; align-items:center; gap:10px; font-weight: 900; letter-spacing: .5px; text-transform: uppercase; }
+        .brand-badge { width:28px; height:28px; border-radius:50%; background: radial-gradient(circle at 30% 30%, #fff 8%, #00d4ff 45%, #0a0e27 90%); box-shadow: 0 0 16px rgba(0,212,255,.5); border:1px solid #00d4ff66; }
+        .brand-text { background: linear-gradient(135deg, #00ff88, #00d4ff, #b19cd9); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip:text; font-size: 1.1em; }
+        .nav-links { display:flex; gap:10px; align-items:center; }
+        .nav-btn { background: none; border:1px solid rgba(0,212,255,0.35); color:#d9f6ff; padding:8px 12px; border-radius:10px; cursor:pointer; font-weight:700; }
+        .nav-btn:hover { background: rgba(0,212,255,0.12); border-color:#00d4ff; }
+        .modal-backdrop { position: fixed; inset:0; background: rgba(5,10,30,0.72); display:none; align-items:center; justify-content:center; z-index: 1100; }
+        .modal { width: min(900px, 92vw); max-height: 86vh; overflow:auto; background: radial-gradient(1200px 400px at 50% -20%, #14213d, #0a0f2b); border:1px solid rgba(0,212,255,0.25); border-radius:16px; box-shadow: 0 20px 60px rgba(0,0,0,0.6); padding: 20px 24px; }
+        .modal h2 { color:#00d4ff; margin-bottom:10px; text-align:left; }
+        .modal .close { background:none; border:none; color:#00d4ff; font-size:1.2em; cursor:pointer; float:right; }
+        .resource-list { margin-top:8px; display:grid; grid-template-columns: 1fr 1fr; gap:10px; }
+        .resource-item a { color:#00ff88; text-decoration:none; border-bottom:1px dashed rgba(0,255,136,.4); }
+        .resource-item a:hover { color:#b4ffe0; }
+        .chapters-btn { background: linear-gradient(135deg, #b19cd9, #00d4ff); color:#0a0e27; border:none; padding:10px 14px; border-radius:10px; font-weight:700; cursor:pointer; }
+        .chapters-backdrop { position: fixed; inset: 0; background: rgba(5,10,30,0.7); display: none; align-items: center; justify-content: center; z-index: 1000; }
+        .chapters-modal { width: min(920px, 92vw); max-height: 86vh; overflow:auto; background: radial-gradient(1200px 400px at 50% -20%, #132038, #0b0f25); border:1px solid rgba(0,212,255,0.25); border-radius:16px; box-shadow: 0 20px 60px rgba(0,0,0,0.6); padding: 20px 24px; position: relative; }
+        .chapters-header { display:flex; justify-content:space-between; align-items:center; gap:12px; padding-bottom:10px; border-bottom:1px solid rgba(0,212,255,0.2); }
+        .chapters-title { font-size: 1.4em; color:#00d4ff; font-weight:800; letter-spacing:0.5px; }
+        .chapters-close { background:none; border:none; color:#00d4ff; font-size:1.6em; cursor:pointer; line-height:1; padding:6px; }
+        .planet-grid { display:grid; grid-template-columns: repeat(4, minmax(140px, 1fr)); gap:16px; padding: 16px 6px 6px; }
+        .planet-card { background: linear-gradient(180deg, rgba(0,212,255,0.08), rgba(0,255,136,0.06)); border:1px solid rgba(0,212,255,0.25); border-radius:14px; padding:14px; cursor:pointer; transition: transform .2s, box-shadow .2s, border-color .2s; display:flex; align-items:center; gap:12px; }
+        .planet-card:hover { transform: translateY(-3px); border-color:#00d4ff; box-shadow: 0 8px 24px rgba(0,212,255,0.2); }
+        .planet-ico { width:38px; height:38px; border-radius:50%; background: radial-gradient(circle at 30% 30%, #fff 8%, #ffd54d 18%, #ff9800 50%, #e65100 90%); box-shadow: 0 0 18px rgba(255, 208, 0, 0.4) }
+        .planet-ico.mercury{ background: radial-gradient(circle at 30% 30%, #eee 10%, #bbb 50%, #888 100%);} 
+        .planet-ico.venus{ background: radial-gradient(circle at 30% 30%, #fff3, #ffcc80 30%, #fb8c00 80%);} 
+        .planet-ico.earth{ background: radial-gradient(circle at 30% 30%, #9ee 5%, #2196f3 35%, #2ecc71 70%, #0a2342 95%);} 
+        .planet-ico.mars{ background: radial-gradient(circle at 30% 30%, #ffcdd2 5%, #e57373 35%, #b71c1c 85%);} 
+        .planet-ico.jupiter{ background: radial-gradient(circle at 30% 30%, #fff 5%, #ffcc80 30%, #a1887f 70%, #6d4c41 95%);} 
+        .planet-ico.saturn{ background: radial-gradient(circle at 30% 30%, #fff 5%, #ffe082 30%, #d4a373 80%);} 
+        .planet-ico.uranus{ background: radial-gradient(circle at 30% 30%, #e0ffff 5%, #80deea 40%, #26c6da 90%);} 
+        .planet-ico.neptune{ background: radial-gradient(circle at 30% 30%, #e3f2fd 5%, #64b5f6 40%, #1e3a8a 90%);} 
+        .chapter-label { display:flex; flex-direction:column; }
+        .chapter-name { color:#e0f7fa; font-weight:700; line-height:1.2; }
+        .chapter-sub { color:#9bd; font-size:.85em; }
+
+        /* Chapter Library (storybook shelf) */
+        .chapter-library { width:100%; max-width: 1200px; margin: 20px auto 0; display:grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; }
+        .chapter-card { background: rgba(10,20,40,0.7); border:1px solid rgba(0,212,255,0.25); border-radius:14px; overflow:hidden; box-shadow: 0 8px 24px rgba(0,0,0,0.4); cursor:pointer; }
+        .chapter-card header { padding:10px 12px; color:#00d4ff; font-weight:800; letter-spacing:.3px; border-bottom:1px solid rgba(0,212,255,0.15); background: linear-gradient(180deg, rgba(0,212,255,0.08), rgba(0,255,136,0.06)); }
+        .chapter-card video { width:100%; height:200px; object-fit:cover; background:#000; display:block; }
+        .chapter-card .caption { padding:10px 12px; color:#9bd; font-size:.9em; min-height:48px; }
+
+        /* Responsive header and Home button */
+        @media (max-width: 640px) {
+            .site-header .bar { padding: 8px 10px; }
+            .brand-text { font-size: .95em; }
+            .nav-btn { padding:8px 10px; font-size:.95em; }
+            .start-btn {
+                padding: 14px 28px;
+                font-size: 0.95em;
+                letter-spacing: 0.4px;
+                margin: 30px auto 15px;
+            }
+        }
+        @media (max-width: 480px) {
+            .start-btn {
+                padding: 12px 24px;
+                font-size: 0.9em;
+                letter-spacing: 0.3px;
+                margin: 25px auto 10px;
+            }
+        }
+
+        /* Responsive video presentation - no black bars */
+        .illustration video { width:100%; height:auto; display:block; object-fit: cover; background:#000; }
+        .video-box { 
+            width:90%; 
+            max-width: 800px; 
+            margin: 0 auto; 
+            background:#000; 
+            border-radius:14px; 
+            overflow:hidden; 
+            box-shadow: 0 12px 40px rgba(0,0,0,.5); 
+            border:1px solid rgba(0,212,255,.2); 
+            position: relative;
+            aspect-ratio: 16/9; /* Standard video aspect ratio */
+        }
+        .video-box video { 
+            width:100%; 
+            height:100%; 
+            object-fit: cover; 
+            display:block;
+        }
+        .video-box .video-overlay { position:absolute; inset:0; }
+        .video-caption { text-align:center; color:#9bd; margin-top:10px; font-size:.95em; }
+        .story-text { margin-top:12px; font-size:1.05em; }
+        /* Portrait variant - optimized for vertical videos */
+        .video-box.portrait { 
+            max-width: 500px; 
+            aspect-ratio: 9/16; /* Portrait aspect ratio */
+        }
+        .video-box.portrait video { 
+            object-fit: cover;
+        }
+        /* Fullscreen video styles - no black bars */
+        .video-box video:fullscreen {
+            object-fit: cover;
+            width: 100vw;
+            height: 100vh;
+            background: #000;
+        }
+        .video-box video:-webkit-full-screen {
+            object-fit: cover;
+            width: 100vw;
+            height: 100vh;
+            background: #000;
+        }
+        .video-box video:-moz-full-screen {
+            object-fit: cover;
+            width: 100vw;
+            height: 100vh;
+            background: #000;
+        }
+        /* On narrow screens, optimize for mobile viewing */
+        @media (max-width: 768px) {
+            .video-box { 
+                width: 96%; 
+                max-width: none;
+                aspect-ratio: 16/9;
+            }
+            .video-box video { 
+                object-fit: cover;
+            }
+            .video-box.portrait { 
+                aspect-ratio: 9/16;
+            }
+            .video-box.portrait video { 
+                object-fit: cover;
+            }
+        }
+
+        /* NASA black-and-white theme overrides */
+        body.nasa-bw { background: radial-gradient(1200px 600px at 50% -10%, #0a0a0a, #000 70%, #000 100%); color:#ececec; }
+        body.nasa-bw h1, body.nasa-bw .scene h2 { -webkit-text-fill-color: unset; background: none; color:#ffffff; text-shadow: 0 0 18px rgba(255,255,255,0.08); }
+        body.nasa-bw .subtitle { color:#d0d0d0; }
+        body.nasa-bw .scene { background: rgba(18,18,18,0.88); border-color: rgba(255,255,255,0.08); }
+        body.nasa-bw .scene-number { background: #ffffff; color:#000; }
+        body.nasa-bw .nav-btn { border-color:#ffffff33; color:#f0f0f0; }
+        body.nasa-bw .nav-btn:hover { background:#ffffff10; border-color:#ffffff66; }
+        body.nasa-bw .brand-text { background: none; -webkit-text-fill-color: unset; color:#fff; }
+        body.nasa-bw .chapter-card { background: rgba(22,22,22,0.82); border-color:#ffffff26; }
+        body.nasa-bw .chapter-card header { color:#fff; background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.04)); }
+        body.nasa-bw .video-caption { color:#cfcfcf; }
+
+        /* Photo-style Nova avatar on title screen */
+        .nova-photo { width: min(38vw, 280px); height: auto; margin: 0 auto 26px; display:block; border-radius: 16px; box-shadow: 0 14px 40px rgba(0,0,0,.55); animation: floaty 5s ease-in-out infinite; }
+        .nova-lottie { width: min(42vw, 320px); margin: 0 auto 26px; }
+        .nova-breathe { animation: breathe 3s ease-in-out infinite; transform-origin: center; }
+        @keyframes breathe { 0%,100%{ transform: scale(1); } 50%{ transform: scale(1.015); } }
+        .nova-wave { transform-origin: 130px 85px; animation: wave 2.2s ease-in-out infinite; }
+        @keyframes wave { 0%,100% { transform: rotate(8deg); } 50% { transform: rotate(-10deg); } }
+        .nova-ponytail-swing { transform-origin: 90px 40px; animation: pony 2.8s ease-in-out infinite; }
+        @keyframes pony { 0%,100% { transform: rotate(6deg); } 50% { transform: rotate(-6deg); } }
+        @keyframes floaty { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+    </style>
+</head>
+<body>
+    <div class="video-background">
+        <video id="bgVideo" autoplay muted loop playsinline preload="auto" aria-hidden="true">
+            <source src="https://cdn.pixabay.com/video/2024/06/30/218784_large.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+        </video>
+    </div>
+    <header class="site-header" role="banner">
+        <div class="bar">
+            <div class="brand" aria-label="Site brand">
+                <div class="brand-badge" aria-hidden="true"></div>
+                <div class="brand-text">Nova • Space Weather Stories</div>
+            </div>
+            <nav class="nav-links" aria-label="Primary">
+                <button id="navHome" class="nav-btn" aria-label="Home">Home</button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- BODY CONTENT (scenes, modals, scripts) copied intact from original index.html -->
+    <!-- For brevity, the remainder stays identical to the current root index.html and will render the same experience. -->
+
+    <div class="container">
+        <!-- Title screen -->
+        <div class="title-screen" id="titleScreen">
+            <div class="stars" id="starsContainer"></div>
+            <h1>Nova's Aurora Adventure</h1>
+            <p class="subtitle">A Space Weather Photographer's Tale</p>
+            <div class="chapter-library" id="chapterLibrary">
+                <div class="chapter-card" data-goto="0">
+                    <header>Scene 1 • Meet Nova</header>
+                    <video muted playsinline loop preload="metadata" poster="thumbnail.jpg">
+                        <source src="https://res.cloudinary.com/drc1ded2t/video/upload/v1759294242/Aurora_Adventures_2_zbdbut.mp4" type="video/mp4" />
+                    </video>
+                    <div class="caption">Nova introduces herself and her love for auroras.</div>
+                </div>
+                <div class="chapter-card" data-goto="1">
+                    <header>Scene 2 • Space Weather</header>
+                    <video muted playsinline loop preload="metadata" poster="thumbnail.jpg">
+                        <source src="https://res.cloudinary.com/drc1ded2t/video/upload/v1759299540/Sun_s_Cosmic_Chat_jytqrt.mp4" type="video/mp4" />
+                    </video>
+                    <div class="caption">How the Sun talks to Earth with flares, CMEs, and wind.</div>
+                </div>
+                <div class="chapter-card" data-goto="2">
+                    <header>Scene 3 • Flares vs CMEs</header>
+                    <video muted playsinline loop preload="metadata" poster="thumbnail.jpg">
+                        <source src="https://res.cloudinary.com/drc1ded2t/video/upload/v1759301058/Nova_s_Space_Weather_uz7q9x.mp4" type="video/mp4" />
+                    </video>
+                    <div class="caption">Quick tour of solar flares, CMEs, and solar wind.</div>
+                </div>
+                <div class="chapter-card" data-goto="3">
+                    <header>Scene 4 • Forecast Tools</header>
+                    <video muted playsinline loop preload="metadata" poster="thumbnail.jpg">
+                        <source src="https://res.cloudinary.com/drc1ded2t/video/upload/v1759340065/Aurora_Hunter_Nova_3_qloatd.mp4" type="video/mp4" />
+                    </video>
+                    <div class="caption">Nova checks Kp index and solar wind to plan a shoot.</div>
+                </div>
+                <div class="chapter-card" data-goto="4">
+                    <header>Scene 5 • Gear & Safety</header>
+                    <video muted playsinline loop preload="metadata" poster="thumbnail.jpg"></video>
+                    <div class="caption">Warm layers, camera gear, and staying safe under the stars.</div>
+                </div>
+                <div class="chapter-card" data-goto="5">
+                    <header>Scene 6 • On the Road</header>
+                    <video muted playsinline loop preload="metadata" poster="thumbnail.jpg"></video>
+                    <div class="caption">Driving to darker skies; clouds vs. clear breaks.</div>
+                </div>
+                <div class="chapter-card" data-goto="6">
+                    <header>Scene 7 • First Glow</header>
+                    <video muted playsinline loop preload="metadata" poster="thumbnail.jpg"></video>
+                    <div class="caption">A faint arc brightens—settings dialed for the first shots.</div>
+                </div>
+                <div class="chapter-card" data-goto="7">
+                    <header>Scene 8 • Storm Peaks</header>
+                    <video muted playsinline loop preload="metadata" poster="thumbnail.jpg"></video>
+                    <div class="caption">Pillars and curtains race—Nova captures the storm at max.</div>
+                </div>
+                <div class="chapter-card" data-goto="8">
+                    <header>Scene 9 • Impacts on Earth</header>
+                    <video muted playsinline loop preload="metadata" poster="thumbnail.jpg"></video>
+                    <div class="caption">GPS drift, radio noise, and power grid precautions explained.</div>
+                </div>
+                <div class="chapter-card" data-goto="9">
+                    <header>Scene 10 • Sharing the Data</header>
+                    <video muted playsinline loop preload="metadata" poster="thumbnail.jpg"></video>
+                    <div class="caption">Nova posts images and compares with space weather dashboards.</div>
+                </div>
+                <div class="chapter-card" data-goto="10">
+                    <header>Scene 11 • Quiet Sun Nights</header>
+                    <video muted playsinline loop preload="metadata" poster="thumbnail.jpg"></video>
+                    <div class="caption">Even calm nights teach patience and planning.</div>
+                </div>
+                <div class="chapter-card" data-goto="11">
+                    <header>Scene 12 • Keep Looking Up</header>
+                    <video muted playsinline loop preload="metadata" poster="thumbnail.jpg"></video>
+                    <div class="caption">Nova’s tips for chasing auroras safely and responsibly.</div>
+                </div>
+            </div>
+            <button class="start-btn" onclick="startStory()">Begin Journey 📸</button>
+        </div>
+
+        <!-- Story content (scenes) -->
+        <div id="storyContent" class="hidden">
+            <div class="pager" role="navigation" aria-label="Scene pagination">
+            <div class="controls-bar-inline">
+                <button class="btn" onclick="goHome()">← Back</button>
+            </div>
+                <div class="dots" aria-hidden="true">
+                    <div class="dot" aria-current="page"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                </div>
+                <div class="controls-bar-inline"></div>
+            </div>
+
+            <section class="scene">
+                <h2><span class="scene-number">Scene 1</span> Meet Nova</h2>
+                <div class="illustration" style="padding:16px;">
+                    <div class="video-box portrait">
+                        <video controls poster="thumbnail.jpg">
+                            <source src="https://res.cloudinary.com/drc1ded2t/video/upload/v1759294242/Aurora_Adventures_2_zbdbut.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="video-caption">Aurora time‑lapse from Nova’s camera.</div>
+                </div>
+                <p class="story-text">Nova is a curious young photographer who plans her evenings around the sky. She loves how auroras ripple like curtains and how the colors shift from green to violet. Every outing begins with a checklist: warm layers, spare batteries, maps, and a safe viewing spot away from busy roads. Nova keeps an eye on the Sun’s mood during the day and sets an intention for the night—sometimes to make a time‑lapse, sometimes to simply watch. She respects the land, keeps lights dim to protect night vision, and invites friends to look up with her. For Nova, the joy is part art, part science, and all wonder.</p>
+                <p class="story-text">She didn’t start as an expert. Nova’s earliest photos were blurry and too dark, but each attempt taught something useful—how to focus at night, how wind rattles a tripod, how frost forms on lenses. She learned to bring reusable hand warmers and to tape cables that might snag. Mistakes became friendly teachers, and Nova kept going, because the sky kept calling.</p>
+                <p class="story-text">Tonight, she breathes slowly as the first stars appear. Somewhere far away, the Sun has set the stage; here on Earth, Nova is ready to witness. She zips her jacket, checks the ground for safe footing, and smiles at the quiet. Whatever happens next, the night already feels like a story waiting to be told.</p>
+            </section>
+
+            <section class="scene">
+                <h2><span class="scene-number">Scene 2</span> What Is Space Weather?</h2>
+                <div class="illustration" style="padding:16px;">
+                    <div class="video-box portrait">
+                        <video controls poster="thumbnail.jpg">
+                            <source src="https://res.cloudinary.com/drc1ded2t/video/upload/v1759299540/Sun_s_Cosmic_Chat_jytqrt.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="video-caption">Space weather basics: how the Sun affects Earth.</div>
+                </div>
+                <p class="story-text">Space weather is the stream of energy, particles, and magnetic fields that continually flows from the Sun. Most days it’s gentle “solar wind,” but sometimes the Sun releases powerful bursts that race outward. When this material reaches Earth, our magnetic field guides it toward the poles where particles collide with the upper atmosphere and glow. That glow becomes auroras; the same energy can also tickle radio signals, nudge satellite orbits, and make compass readings drift. Scientists at agencies like NASA and NOAA watch the Sun with special satellites so people like Nova—and pilots, power operators, ship captains, and astronauts—can plan safely.</p>
+                <p class="story-text">Satellites like DSCOVR and SOHO sit between Earth and the Sun, measuring gusts in the solar wind. Their readings travel to forecasting centers, where teams compare them with images from solar observatories. A growing storm looks like a ripple racing across the Sun’s surface, or a bright loop lifting into space. Those signals help people decide when to prepare.</p>
+                <p class="story-text">For Nova, the science turns into choices: drive north or wait, pick a lake or a hill, set the interval to ten seconds or twenty. Space weather might sound complicated, but it boils down to a beautiful idea—our home star and our blue world are always in conversation, and sometimes that conversation lights up the night.</p>
+            </section>
+
+            <section class="scene">
+                <h2><span class="scene-number">Scene 3</span> Flares, CMEs, and Solar Wind</h2>
+                <div class="illustration" style="padding:16px;">
+                    <div class="video-box portrait">
+                        <video controls poster="thumbnail.jpg">
+                            <source src="https://res.cloudinary.com/drc1ded2t/video/upload/v1759301058/Nova_s_Space_Weather_uz7q9x.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="video-caption">Flares vs CMEs vs solar wind.</div>
+                </div>
+                <p class="story-text">Solar flares are sudden flashes of light and X‑rays that travel at light speed; they can disturb radio for a short time on the day side of Earth. Coronal mass ejections (CMEs) are enormous bubbles of magnetized plasma that take one to three days to arrive; if the CME’s magnetic field points southward when it reaches Earth, it can connect strongly with our north‑pointing field and power grand auroras. The ever‑present solar wind is gentler but can still spark activity when it speeds up. Nova doesn’t need to memorize physics—she just learns the patterns that help her predict when the sky might dance.</p>
+                <p class="story-text">When forecasts say “southward Bz” and “high speed,” Nova knows to pack fast. Flares may cause brief radio noise; CMEs can power long, colorful displays that wander across the sky. She thinks of each phenomenon like instruments in a band—the flare is a sharp cymbal crash, the CME is a deep drum roll, and the solar wind is the steady bass line.</p>
+                <p class="story-text">Even with good signals, surprises happen. The CME might miss, or clouds might sneak in. Nova treats each outing like an experiment: plan, observe, adapt. That mindset keeps the experience fun and the photos honest to the moment.</p>
+            </section>
+
+            <section class="scene">
+                <h2><span class="scene-number">Scene 4</span> Forecast Tools</h2>
+                <div class="illustration" style="padding:16px;">
+                    <div class="video-box portrait">
+                        <video controls poster="thumbnail.jpg">
+                            <source src="https://res.cloudinary.com/drc1ded2t/video/upload/v1759313808/Aurora_Hunter_Nova_uiywq5.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="video-caption">Forecast dashboards Nova checks before a shoot.</div>
+                </div>
+                <p class="story-text">Before leaving, Nova checks a few favorite tools: the Kp index (a global scale of storm strength), the Bz value (which shows whether the solar magnetic field is tilted south to couple with Earth), solar wind speed and density, and local cloud forecasts. She skims real‑time plots from space weather centers and sets alerts so she doesn’t stare at graphs all night. A high Kp and a south‑tilted Bz tell her conditions could be great. But clouds matter, so Nova keeps a backup site in mind. Forecasts aren’t promises—they’re clues. She treats them like a treasure map pointing toward possibility.</p>
+                <p class="story-text">Her pack list lives on a card: tripod, remote, spare lens cloths, battery pack, reflective vest, and a paper map for places with no signal. She wears micro‑spikes when surfaces are icy and never walks on thin lake ice. Safety first, photos second—because the best gear is a clear mind.</p>
+                <p class="story-text">With the plan set, Nova sends a message to a friend saying where she’s headed and when she’ll be back. She tops off the thermos with hot cocoa, locks the door, and steps into the cold, grinning at the crunch beneath her boots.</p>
+            </section>
+
+            <section class="scene">
+                <h2><span class="scene-number">Scene 5</span> Gear & Safety</h2>
+                <p class="story-text">Gear matters in the cold: Nova packs insulated boots, mittens with liner gloves, a thermos, and a windproof jacket. Her camera bag holds two bodies, fast wide‑angle lenses, extra memory cards, and plenty of batteries (cold drains them fast). A sturdy tripod keeps time‑lapses smooth. She uses a red headlamp to preserve night vision and keeps her phone dim. Nova leaves a plan with a friend, checks the road conditions, and avoids private property and wildlife areas. Good photos start with good decisions, and the best souvenir is getting home safely with stories to tell.</p>
+                <p class="story-text">She keeps lens heaters coiled around glass to prevent fog and frost, and stores spare batteries in an inner pocket close to body heat. Gaffer tape fixes almost anything, from flapping straps to a slipping focus ring. A soft brush sweeps away snowflakes before they melt.</p>
+                <p class="story-text">When everything is packed, Nova does one last walk‑around: car safe, lights off, no litter, footprint paths kept to durable surfaces. She wants the place to look exactly as it did when she arrived—only the sky will have changed.</p>
+            </section>
+
+            <section class="scene">
+                <h2><span class="scene-number">Scene 6</span> On the Road</h2>
+                <p class="story-text">The drive to dark skies is part of the adventure. Nova chooses wide pull‑offs and never stops on the shoulder of fast roads. She scouts during daylight so nighttime parking is easy. On the way, she watches clouds slide past the Moon and checks for breaks that might open right when the aurora peaks. Light pollution fades as she leaves town; the Milky Way grows brighter. If forecasts change, she pivots—sometimes the best view is only a short detour away. Patience and flexibility turn near‑misses into magic moments.</p>
+                <p class="story-text">Sometimes the radio carries a space weather alert between songs. Nova smiles—it’s like getting a postcard from the Sun. She slows for wildlife, keeps headlights low near others, and follows posted rules in parks and pullouts.</p>
+                <p class="story-text">She arrives early, steps out to test the air, and listens. The world gets quieter in winter, and that calm sets the mood for the night’s work. If clouds crowd the horizon, she checks a secondary site and weighs the time to move. Decisions now save disappointment later.</p>
+            </section>
+
+            <section class="scene">
+                <h2><span class="scene-number">Scene 7</span> First Glow</h2>
+                <p class="story-text">At first the aurora is a soft arc hugging the horizon. Nova dials settings for a clean, bright image without too much noise: a wide aperture, a moderately high ISO, and a shutter long enough to gather light but short enough to keep pillars from smearing. She focuses carefully on a distant star and uses manual focus to keep it locked. A quick test frame shows color and structure; the histogram confirms she’s not clipping highlights. With composition set, Nova breathes and waits for the sky to take the stage.</p>
+                <p class="story-text">She frames a spruce tree against the arc, leaving room for the sky to grow. Foreground anchors help viewers feel like they’re standing right there, boots in the snow, looking up. Even if the display fades, the composition tells a quiet story.</p>
+                <p class="story-text">A faint ripple crawls across the arc—first movement. Nova grins and checks her intervals, making sure the time‑lapse will look smooth. It’s the small adjustments now that make the final video sing.</p>
+            </section>
+
+            <section class="scene">
+                <h2><span class="scene-number">Scene 8</span> Storm Peaks</h2>
+                <p class="story-text">When the storm surges, curtains rush across the sky and vertical pillars flicker like piano keys. Nova adjusts exposure to freeze structure—shorter shutter, lower ISO—and anchors the scene with a foreground: a snowy tree, a cabin window, a calm lake reflecting green. If the motion is fast, she starts a time‑lapse with an intervalometer. Between sequences, she simply looks up, letting the camera work while she enjoys the spectacle. The cold bites, but excitement keeps her warm.</p>
+                <p class="story-text">She experiments with panoramas and quick night videos to capture motion the eye can’t replay. Each frame is a tiny note in a larger song, and the timing matters—too long and pillars blur, too short and the sky looks dim.</p>
+                <p class="story-text">When colors bloom into purples and reds, Nova remembers why she chose to learn all this. The science helps, but the feeling is what she’ll take home: a sky alive with music, heard with the eyes.</p>
+            </section>
+
+            <section class="scene">
+                <h2><span class="scene-number">Scene 9</span> Impacts on Earth</h2>
+                <p class="story-text">The same solar energy that paints the aurora can nudge technology. GPS paths may wobble, so farmers and surveyors double‑check positions. Shortwave radio can hiss, so pilots talk with controllers to use clearer channels. Satellites feel a thicker upper atmosphere and may need extra nudges to keep altitude. Power grid operators watch for currents induced in long lines and can reroute flow to stay safe. Astronauts shelter in more protected parts of the station during strong radiation events. Most people won’t notice anything at all—except a beautiful sky—but planning keeps everyone safe.</p>
+                <p class="story-text">Nova likes to explain this to kids who ask about her photos. She says: “The sky is telling a story not just in color, but in invisible signals. Engineers read those signals so everyday life keeps humming.” Kids nod, and then point back at the lights—because the beauty is still the star.</p>
+                <p class="story-text">Understanding impact builds respect. It reminds Nova that her art is connected to many people’s work—the pilots above, the ships offshore, the engineers watching power lines, and the scientists who make forecasts possible.</p>
+            </section>
+
+            <section class="scene">
+                <h2><span class="scene-number">Scene 10</span> Sharing the Data</h2>
+                <p class="story-text">Back home, Nova warms her fingers and reviews the night. She processes photos gently to keep colors natural and shares her favorites with friends and family. She compares her timestamps with data from NASA and NOAA dashboards to see how each burst matched the Kp curve and solar wind spikes. Sometimes she submits images to citizen‑science projects that help researchers connect ground photos with satellite measurements. Her pictures become tiny data points—and big memories.</p>
+                <p class="story-text">She annotates a few shots with notes about camera settings and location (without revealing sensitive places) so others can learn. Good metadata turns pretty pictures into helpful guides for beginners.</p>
+                <p class="story-text">When she posts, Nova reminds followers to dress warmly, respect private property, and bring friends. The comments fill with “wows” and “I saw it too!”—the best kind of community.</p>
+            </section>
+
+            <section class="scene">
+                <h2><span class="scene-number">Scene 11</span> Quiet Sun Nights</h2>
+                <p class="story-text">Not every night explodes with color. Quiet nights teach Nova to listen: to the wind in the trees, to the crunch of snow, to the steady sweep of constellations. She practices star‑trail shots, refines compositions, and notes which locations will shine when the next storm arrives. She packs out every crumb, leaves no tracks where she shouldn’t, and thanks the land for the time she spent there. Space weather ebbs and flows; wonder is always available.</p>
+                <p class="story-text">She also reviews mistakes without judgment—missed focus, a shaky tripod, or a dead battery at the worst moment. Each error has a fix to try next time. Instead of “failure,” Nova calls it “fieldwork.”</p>
+                <p class="story-text">The stars arc across the sky as hours pass. Even with no aurora, the Earth’s quiet rotation feels miraculous. Nova drives home rested, not disappointed.</p>
+            </section>
+
+            <section class="scene">
+                <h2><span class="scene-number">Scene 12</span> Keep Looking Up</h2>
+                <p class="story-text">Nova’s final advice is simple: keep learning, stay safe, and be kind to the night. Check trustworthy forecasts, carry extra layers, and never trespass or disturb wildlife. Use dim red light, protect your eyes, and share the view with others—the sky is for everyone. Whether the Sun is quiet or lively, there’s always something beautiful overhead. Keep looking up, and let curiosity guide your next adventure.</p>
+                <p class="story-text">If you’re new, start with a tripod, a wide lens, and curiosity. Join a local astronomy or photography group, learn your skies, and practice focusing on bright stars. The best photos begin with simply going outside.</p>
+                <p class="story-text">When you finally meet the aurora, take a minute to lower the camera and look. Some moments are for memory first and photographs second. Those are the ones that keep you coming back.</p>
+            </section>
+        </div>
+    </div>
+
+    <script>
+        /* Lightweight stars and 3D init; same as original */
+        function createStars() { const container = document.getElementById('starsContainer'); for (let i = 0; i < 100; i++) { const star = document.createElement('div'); star.className = 'star'; const size = Math.random() * 3 + 1; star.style.width = size + 'px'; star.style.height = size + 'px'; star.style.left = Math.random() * 100 + '%'; star.style.top = Math.random() * 100 + '%'; star.style.animationDelay = Math.random() * 3 + 's'; container && container.appendChild(star);} }
+        function startStory(){ document.getElementById('titleScreen').style.display='none'; document.getElementById('storyContent') && document.getElementById('storyContent').classList.remove('hidden'); window.scrollTo(0,0); }
+        function goHome(){ document.getElementById('titleScreen').style.display=''; document.getElementById('storyContent') && document.getElementById('storyContent').classList.add('hidden'); window.scrollTo(0,0); }
+        createStars();
+        // Apply NASA B/W theme
+        document.body.classList.add('nasa-bw');
+
+        // Ensure video background loads and plays
+        (function initVideoBackground() {
+            const video = document.getElementById('bgVideo');
+            if (video) {
+                video.addEventListener('loadeddata', function() {
+                    console.log('Video loaded successfully');
+                    video.style.opacity = '1';
+                });
+                
+                video.addEventListener('error', function(e) {
+                    console.error('Video failed to load:', e);
+                    // Fallback: set a dark background
+                    document.body.style.background = 'linear-gradient(135deg, #0a0e27 0%, #1a1a3e 50%, #000 100%)';
+                });
+                
+                // Force play if autoplay fails
+                video.play().catch(function(error) {
+                    console.log('Autoplay prevented, trying manual play:', error);
+                });
+            }
+        })();
+
+
+        // Chapter library interactions: click to open that scene
+        (function initChapterLibrary(){
+          const shelf = document.getElementById('chapterLibrary');
+          if(!shelf) return;
+          shelf.querySelectorAll('.chapter-card').forEach((card)=>{
+            // Autoplay preview silently
+            const vid = card.querySelector('video');
+            if(vid){ vid.muted = true; vid.play().catch(()=>{}); }
+            card.addEventListener('click', ()=>{
+              startStory();
+              const target = Number(card.getAttribute('data-goto')||0);
+              const scenes = Array.from(document.querySelectorAll('#storyContent .scene'));
+              if(isFinite(target) && scenes[target]){
+                scenes.forEach((s,i)=>{ s.style.display = i===target ? '' : 'none'; });
+                scenes[target].scrollIntoView({behavior:'smooth'});
+              }
+            });
+          });
+        })();
+
+        // Wire Home button to redirect to home page
+        (function initHome(){
+          const home = document.getElementById('navHome');
+          if(home){ home.addEventListener('click', function(){ window.location.href = '/home.html'; }); }
+        })();
+
+        // Lottie disabled; static image remains
+    </script>
+</body>
+</html>

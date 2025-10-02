@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Stellar Stories • Journey Through Space Weather</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html, body { 
+            height: 100%; 
+            background: transparent; 
+            color: #000; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            overflow-x: hidden; 
+            font-weight: 600;
+        }
+        
+        .wrap { position: relative; min-height: 100vh; width: 100vw; }
+        
+        /* Enhanced Video Background */
+        video.bgvideo { 
+            position: fixed; 
+            top: 0;
+            left: 0;
+            width: 100vw; 
+            height: 100vh; 
+            object-fit: cover; 
+            pointer-events: none; 
+            filter: brightness(0.8) contrast(0.8) saturate(1.1);
+            z-index: -10;
+            display: block;
+            min-width: 100%;
+            min-height: 100%;
+        }
+        
+        
+        
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 20px 30px;
+            background: linear-gradient(180deg, rgba(0, 0, 0, 0.8), transparent);
+            backdrop-filter: blur(10px);
+            z-index: 100;
+        }
+        
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 900;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-size: 1.1em;
+        }
+        
+        .brand-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #fff 8%, #00d4ff 45%, #0a0e27 90%);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.6);
+            border: 2px solid rgba(0, 212, 255, 0.3);
+        }
+        
+        .brand-text {
+            background: linear-gradient(135deg, #00ff88, #00d4ff, #b19cd9);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        /* Hero Section */
+        .hero {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+            padding: 100px 30px 60px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .hero-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            border-radius: 25px;
+            font-size: 0.9em;
+            font-weight: 600;
+            color: #00ff88;
+            margin-bottom: 30px;
+            animation: glow 3s ease-in-out infinite;
+        }
+        
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 10px rgba(0, 255, 136, 0.3); }
+            50% { box-shadow: 0 0 25px rgba(0, 255, 136, 0.6); }
+        }
+        
+        h1 {
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            font-weight: 900;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+            background: linear-gradient(135deg, #ffffff 0%, #00d4ff 30%, #00ff88 60%, #b19cd9 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 25px;
+            animation: titleShine 4s ease-in-out infinite;
+        }
+        
+        @keyframes titleShine {
+            0%, 100% { filter: drop-shadow(0 0 30px rgba(0, 212, 255, 0.4)); }
+            50% { filter: drop-shadow(0 0 50px rgba(0, 255, 136, 0.6)); }
+        }
+        
+        .subtitle {
+            font-size: clamp(1.1rem, 3vw, 1.4rem);
+            color: rgba(0, 0, 0, 0.9);
+            max-width: 700px;
+            line-height: 1.6;
+            margin-bottom: 40px;
+            font-weight: 700;
+        }
+        
+        /* Features Grid */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin: 50px 0;
+            max-width: 900px;
+        }
+        
+        .feature {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 20px;
+            padding: 30px 25px;
+            text-align: left;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .feature::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.1), transparent);
+            transition: left 0.6s;
+        }
+        
+        .feature:hover {
+            transform: translateY(-8px);
+            border-color: rgba(0, 212, 255, 0.4);
+            box-shadow: 0 20px 60px rgba(0, 212, 255, 0.2);
+        }
+        
+        .feature:hover::before {
+            left: 100%;
+        }
+        
+        .feature-icon {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            display: block;
+        }
+        
+        .feature h3 {
+            color: #00d4ff;
+            font-size: 1.3em;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+        
+        .feature p {
+            color: rgba(0, 0, 0, 0.8);
+            line-height: 1.5;
+            font-size: 0.95em;
+            font-weight: 600;
+        }
+        
+        /* Enhanced CTA Button */
+        .cta {
+            margin-top: 40px;
+            padding: 18px 40px;
+            border-radius: 50px;
+            border: 2px solid rgba(0, 212, 255, 0.3);
+            color: #000000;
+            background: linear-gradient(135deg, #00ff88 0%, #00d4ff 50%, #b19cd9 100%);
+            font-weight: 800;
+            font-size: 1.1em;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            cursor: pointer;
+            box-shadow: 
+                0 15px 40px rgba(0, 212, 255, 0.3),
+                inset 0 2px 0 rgba(255, 255, 255, 0.2);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            text-shadow: 0 1px 2px rgba(255, 255, 255, 0.3);
+        }
+        
+        .cta::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.6s;
+        }
+        
+        .cta:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 
+                0 25px 60px rgba(0, 212, 255, 0.5),
+                inset 0 2px 0 rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+        
+        .cta:hover::before {
+            left: 100%;
+        }
+        
+        .cta:active {
+            transform: translateY(-1px) scale(1.02);
+        }
+        
+        /* Stats Section */
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 60px;
+            flex-wrap: wrap;
+        }
+        
+        .stat {
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: 900;
+            color: #00ff88;
+            display: block;
+            line-height: 1;
+        }
+        
+        .stat-label {
+            font-size: 0.9em;
+            color: rgba(0, 0, 0, 0.7);
+            margin-top: 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header { padding: 15px 20px; }
+            .hero { padding: 80px 20px 40px; }
+            .features { grid-template-columns: 1fr; gap: 20px; }
+            .stats { gap: 30px; }
+            .stat { padding: 15px; }
+        }
+        
+        @media (max-width: 480px) {
+            .hero-badge { font-size: 0.8em; padding: 6px 16px; }
+            .subtitle { font-size: 1rem; }
+            .feature { padding: 25px 20px; }
+            .cta { padding: 16px 32px; font-size: 1em; }
+        }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <!-- Enhanced Video Background -->
+        <video id="homeVideo" class="bgvideo" autoplay muted loop playsinline preload="auto" aria-hidden="true">
+            <source src="https://res.cloudinary.com/drc1ded2t/video/upload/v1759381412/192935-893872011_small_loaqcq.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+        </video>
+        
+        
+        
+        <!-- Header -->
+        <header class="header">
+            <div class="brand">
+                <div class="brand-icon"></div>
+                <div class="brand-text">Stellar Stories</div>
+            </div>
+        </header>
+        
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-badge">✨ Interactive Space Weather Experience</div>
+            
+            <h1>Journey Through the Aurora's Dance</h1>
+            
+            <p class="subtitle">
+                Follow Nova, a passionate space weather photographer, as she captures the breathtaking beauty of auroras while unraveling the cosmic forces that create these celestial masterpieces.
+            </p>
+            
+            <!-- Features Grid -->
+            <div class="features">
+                <div class="feature">
+                    <span class="feature-icon">🌌</span>
+                    <h3>Immersive Storytelling</h3>
+                    <p>Experience Nova's journey through 12 captivating chapters filled with stunning visuals and scientific wonder.</p>
+                </div>
+                
+                <div class="feature">
+                    <span class="feature-icon">📸</span>
+                    <h3>Real Photography Tips</h3>
+                    <p>Learn authentic aurora photography techniques, gear recommendations, and safety tips from a seasoned photographer.</p>
+                </div>
+                
+                <div class="feature">
+                    <span class="feature-icon">🔬</span>
+                    <h3>Space Weather Science</h3>
+                    <p>Discover how solar flares, CMEs, and space weather create the magical light shows in our polar skies.</p>
+                </div>
+            </div>
+            
+            <!-- Enhanced CTA Button -->
+            <button id="start" class="cta" aria-label="Begin your aurora adventure">
+                Begin Your Adventure 🚀
+            </button>
+            
+            <!-- Stats Section -->
+            <div class="stats">
+                <div class="stat">
+                    <span class="stat-number">12</span>
+                    <span class="stat-label">Story Chapters</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">4K</span>
+                    <span class="stat-label">Video Quality</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">∞</span>
+                    <span class="stat-label">Wonder & Discovery</span>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        
+        // Enhanced video background loading with multiple fallbacks
+        (function initVideoBackground() {
+            const video = document.getElementById('homeVideo');
+            if (video) {
+                console.log('Initializing video background...');
+                
+                // Set initial opacity to 0 and fade in when loaded
+                video.style.opacity = '0';
+                video.style.transition = 'opacity 1s ease-in-out';
+                
+                video.addEventListener('loadstart', function() {
+                    console.log('Video loading started...');
+                });
+                
+                video.addEventListener('loadeddata', function() {
+                    console.log('Home video loaded successfully');
+                    video.style.opacity = '1';
+                });
+                
+                video.addEventListener('canplay', function() {
+                    console.log('Video can start playing');
+                    video.style.opacity = '1';
+                });
+                
+                video.addEventListener('error', function(e) {
+                    console.error('Home video failed to load:', e);
+                    console.log('Trying fallback video...');
+                    
+                    // Try fallback video source
+                    video.innerHTML = `
+                        <source src="https://cdn.pixabay.com/video/2023/12/12/192935-893872011_large.mp4" type="video/mp4" />
+                        <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4" />
+                    `;
+                    video.load();
+                });
+                
+                // Force play if autoplay fails
+                video.play().catch(function(error) {
+                    console.log('Autoplay prevented, trying manual play:', error);
+                    // Try to play on user interaction
+                    document.addEventListener('click', function() {
+                        video.play().catch(e => console.log('Manual play failed:', e));
+                    }, { once: true });
+                });
+                
+                // Debug: Check if video is actually playing
+                setTimeout(function() {
+                    if (video.paused) {
+                        console.log('Video is paused, attempting to play...');
+                        video.play().catch(e => console.log('Delayed play failed:', e));
+                    } else {
+                        console.log('Video is playing successfully');
+                    }
+                }, 2000);
+            } else {
+                console.error('Video element not found!');
+            }
+        })();
+        
+        // Enhanced button interaction
+        document.getElementById('start').addEventListener('click', function() {
+            // Add a subtle loading effect
+            this.style.transform = 'scale(0.95)';
+            this.innerHTML = 'Launching... 🚀';
+            
+            setTimeout(() => {
+      window.location.href = '/story.html';
+            }, 500);
+        });
+        
+        // Smooth scroll reveal animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+        
+        // Observe feature cards for animation
+        document.querySelectorAll('.feature').forEach(feature => {
+            feature.style.opacity = '0';
+            feature.style.transform = 'translateY(30px)';
+            feature.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(feature);
+    });
+    </script>
+</body>
+</html>
