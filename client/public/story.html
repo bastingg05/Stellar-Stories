@@ -17,9 +17,9 @@
         .stars { position: absolute; width: 100%; height: 100%; pointer-events: none; }
         .star { position: absolute; background: white; border-radius: 50%; animation: twinkle 3s infinite ease-in-out; }
         @keyframes twinkle { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
-        h1 { font-size: 3.5em; margin-bottom: 10px; background: linear-gradient(135deg, #00ff88, #00d4ff, #b19cd9); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; z-index: 10; animation: titleGlow 3s ease-in-out infinite; }
+        h1 { font-size: 2.5em; margin-bottom: 10px; background: linear-gradient(135deg, #00ff88, #00d4ff, #b19cd9); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; z-index: 10; animation: titleGlow 3s ease-in-out infinite; }
         @keyframes titleGlow { 0%, 100% { filter: drop-shadow(0 0 20px rgba(0, 255, 136, 0.4)); } 50% { filter: drop-shadow(0 0 40px rgba(0, 212, 255, 0.6)); } }
-        .subtitle { font-size: 1.5em; color: #00d4ff; margin-bottom: 40px; z-index: 10; }
+        .subtitle { font-size: 1.2em; color: #00d4ff; margin-bottom: 30px; z-index: 10; }
         .start-btn { 
             background: linear-gradient(135deg, #00ff88 0%, #00d4ff 50%, #b19cd9 100%); 
             color: #ffffff; 
@@ -224,17 +224,32 @@
         .chapter-sub { color:#9bd; font-size:.85em; }
 
         /* Chapter Library (storybook shelf) */
-        .chapter-library { width:100%; max-width: 1200px; margin: 20px auto 0; display:grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+        .chapter-library { width:100%; max-width: 1000px; margin: 20px auto 0; display:grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; }
         .chapter-card { background: rgba(10,20,40,0.7); border:1px solid rgba(0,212,255,0.25); border-radius:14px; overflow:hidden; box-shadow: 0 8px 24px rgba(0,0,0,0.4); cursor:pointer; }
         .chapter-card header { padding:10px 12px; color:#00d4ff; font-weight:800; letter-spacing:.3px; border-bottom:1px solid rgba(0,212,255,0.15); background: linear-gradient(180deg, rgba(0,212,255,0.08), rgba(0,255,136,0.06)); }
-        .chapter-card video { width:100%; height:200px; object-fit:cover; background:#000; display:block; }
+        .chapter-card video { width:100%; height:160px; object-fit:cover; background:#000; display:block; }
         .chapter-card .caption { padding:10px 12px; color:#9bd; font-size:.9em; min-height:48px; }
 
         /* Responsive header and Home button */
+        @media (max-width: 1024px) {
+            h1 { font-size: 2.2em; }
+            .subtitle { font-size: 1.1em; }
+            .chapter-library { max-width: 900px; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; }
+        }
+        @media (max-width: 768px) {
+            h1 { font-size: 2em; }
+            .subtitle { font-size: 1em; }
+            .chapter-library { max-width: 700px; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+            .chapter-card video { height: 140px; }
+        }
         @media (max-width: 640px) {
             .site-header .bar { padding: 8px 10px; }
             .brand-text { font-size: .95em; }
             .nav-btn { padding:8px 10px; font-size:.95em; }
+            h1 { font-size: 1.8em; }
+            .subtitle { font-size: 0.95em; }
+            .chapter-library { max-width: 100%; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; }
+            .chapter-card video { height: 120px; }
             .start-btn {
                 padding: 14px 28px;
                 font-size: 0.95em;
@@ -243,6 +258,10 @@
             }
         }
         @media (max-width: 480px) {
+            h1 { font-size: 1.6em; }
+            .subtitle { font-size: 0.9em; }
+            .chapter-library { grid-template-columns: 1fr; gap: 8px; }
+            .chapter-card video { height: 100px; }
             .start-btn {
                 padding: 12px 24px;
                 font-size: 0.9em;
