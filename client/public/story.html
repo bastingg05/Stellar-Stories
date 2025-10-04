@@ -819,37 +819,31 @@
                 console.log('Chapter video autoplay prevented, will play on interaction');
               });
               
-              // Add hover handler for desktop (play on hover, pause on leave)
+              // Ensure video always plays continuously (no pause on hover)
               card.addEventListener('mouseenter', function() {
-                // Force load and play immediately
+                // Force load and play immediately if paused
                 vid.load();
-                vid.play().catch(e => console.log('Hover play failed:', e));
-              });
-              
-              card.addEventListener('mouseleave', function() {
-                if (!vid.paused) {
-                  vid.pause();
+                if (vid.paused) {
+                  vid.play().catch(e => console.log('Hover play failed:', e));
                 }
               });
               
-              // Add touch/click handlers for mobile video play
+              // Don't pause on mouse leave - keep playing continuously
+              
+              // Add touch/click handlers for mobile video play (no pause)
               card.addEventListener('touchstart', function() {
-                // Force load and play immediately
+                // Force load and play immediately if paused
                 vid.load();
                 if (vid.paused) {
                   vid.play().catch(e => console.log('Touch play failed:', e));
-                } else {
-                  vid.pause();
                 }
               });
               
               card.addEventListener('click', function() {
-                // Force load and play immediately
+                // Force load and play immediately if paused
                 vid.load();
                 if (vid.paused) {
                   vid.play().catch(e => console.log('Click play failed:', e));
-                } else {
-                  vid.pause();
                 }
               });
             }
@@ -865,16 +859,20 @@
           });
         })();
 
-        // Page visibility change handler to pause videos when page becomes hidden
+        // Page visibility change handler - don't pause preview videos
         document.addEventListener('visibilitychange', function() {
             if (document.hidden) {
-                // Page is hidden, pause all videos
-                pauseAllChapterVideos();
+                // Page is hidden, pause only story videos (not preview videos)
                 pauseAllStoryVideos();
-                console.log('Page hidden - paused all videos');
+                console.log('Page hidden - paused story videos only');
             } else {
-                // Page is visible again
-                console.log('Page visible - videos remain paused until user interaction');
+                // Page is visible again - ensure preview videos are playing
+                document.querySelectorAll('.chapter-card video').forEach(video => {
+                    if (video.paused) {
+                        video.play().catch(e => console.log('Visibility restart failed:', e));
+                    }
+                });
+                console.log('Page visible - ensured preview videos are playing');
             }
         });
 
@@ -889,7 +887,28 @@
                 // Preload the video for immediate playback
                 video.load();
                 console.log('Chapter video preloaded (muted):', video.src);
+                
+                // Ensure video always plays continuously
+                const ensureContinuousPlay = function() {
+                    if (video.paused) {
+                        video.play().catch(e => console.log('Restart play failed:', e));
+                    }
+                };
+                
+                // Add event listeners to restart if paused
+                video.addEventListener('pause', ensureContinuousPlay);
+                video.addEventListener('ended', ensureContinuousPlay);
+                video.addEventListener('error', ensureContinuousPlay);
             });
+            
+            // Periodic check to ensure all preview videos are playing
+            setInterval(function() {
+                document.querySelectorAll('.chapter-card video').forEach(video => {
+                    if (video.paused) {
+                        video.play().catch(e => console.log('Periodic restart failed:', e));
+                    }
+                });
+            }, 3000); // Check every 3 seconds
             
             // Add fallback handling for all chapter videos
             document.querySelectorAll('.chapter-card video').forEach(video => {
