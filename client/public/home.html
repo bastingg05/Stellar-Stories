@@ -499,12 +499,13 @@
             Your browser does not support the video tag.
         </video>
         
-        <!-- Background Music - Interstellar Main Theme -->
+        <!-- Background Music -->
         <audio id="backgroundMusic" loop preload="auto" volume="0.4" autoplay>
-            <source src="https://archive.org/download/InterstellarMainThemeHansZimmer/Interstellar%20Main%20Theme%20-%20Hans%20Zimmer.mp3" type="audio/mpeg">
+            <source src="https://example.com/audio-to-url" type="audio/mpeg">
+            <source src="https://example.com/audio-to-url" type="audio/wav">
+            <source src="https://example.com/audio-to-url" type="audio/ogg">
             <source src="https://www.bensound.com/bensound-music/bensound-epic.mp3" type="audio/mpeg">
             <source src="https://www.bensound.com/bensound-music/bensound-cinematic.mp3" type="audio/mpeg">
-            <source src="https://www.bensound.com/bensound-music/bensound-dreams.mp3" type="audio/mpeg">
             Your browser does not support the audio element.
         </audio>
         
@@ -579,7 +580,7 @@
 
     <script>
         
-        // Background Music Management - Interstellar Main Theme
+        // Background Music Management - Custom Audio Source
         (function initBackgroundMusic() {
             const music = document.getElementById('backgroundMusic');
             const musicControl = document.getElementById('musicControl');
@@ -641,7 +642,7 @@
                     if (!autoplayAttempted) {
                         autoplayAttempted = true;
                         music.play().then(() => {
-                            console.log('Interstellar theme autoplay successful');
+                            console.log('Custom audio autoplay successful');
                             musicIcon.textContent = '⏸️';
                             musicControl.classList.add('playing');
                             isPlaying = true;
@@ -688,7 +689,7 @@
                     }
                 });
                 
-                console.log('Interstellar Main Theme background music initialized');
+                console.log('Background music initialized with custom audio source');
             }
         })();
         
