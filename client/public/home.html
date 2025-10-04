@@ -19,6 +19,16 @@
         
         .wrap { position: relative; min-height: 100vh; width: 100vw; }
         
+        /* Mobile-only zoom - only affects mobile devices */
+        @media (max-width: 768px) {
+            .wrap { 
+                transform: scale(0.85); 
+                transform-origin: top left; 
+                width: 117.65vw; 
+                height: 117.65vh; 
+            }
+        }
+        
         /* Custom Scrollbar Styling */
         ::-webkit-scrollbar {
             width: 8px;
@@ -65,6 +75,16 @@
             display: block;
             min-width: 100vw;
             min-height: 100vh;
+        }
+        
+        /* Mobile video background adjustment */
+        @media (max-width: 768px) {
+            video.bgvideo { 
+                width: 117.65vw; 
+                height: 117.65vh; 
+                min-width: 117.65vw;
+                min-height: 117.65vh;
+            }
         }
         
         
