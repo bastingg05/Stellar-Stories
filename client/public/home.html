@@ -499,8 +499,9 @@
             Your browser does not support the video tag.
         </video>
         
-        <!-- Background Music -->
-        <audio id="backgroundMusic" loop preload="auto" volume="0.3">
+        <!-- Background Music - Interstellar Main Theme -->
+        <audio id="backgroundMusic" loop preload="auto" volume="0.4" autoplay>
+            <source src="https://archive.org/download/InterstellarMainThemeHansZimmer/Interstellar%20Main%20Theme%20-%20Hans%20Zimmer.mp3" type="audio/mpeg">
             <source src="https://www.bensound.com/bensound-music/bensound-epic.mp3" type="audio/mpeg">
             <source src="https://www.bensound.com/bensound-music/bensound-cinematic.mp3" type="audio/mpeg">
             <source src="https://www.bensound.com/bensound-music/bensound-dreams.mp3" type="audio/mpeg">
@@ -578,16 +579,17 @@
 
     <script>
         
-        // Background Music Management
+        // Background Music Management - Interstellar Main Theme
         (function initBackgroundMusic() {
             const music = document.getElementById('backgroundMusic');
             const musicControl = document.getElementById('musicControl');
             const musicIcon = document.getElementById('musicIcon');
             let isPlaying = false;
+            let autoplayAttempted = false;
             
             if (music && musicControl) {
-                // Set initial volume
-                music.volume = 0.3;
+                // Set initial volume for Interstellar theme
+                music.volume = 0.4;
                 
                 // Handle audio loading errors
                 music.addEventListener('error', function(e) {
@@ -619,7 +621,7 @@
                 musicControl.addEventListener('click', function() {
                     if (isPlaying) {
                         music.pause();
-                        musicIcon.textContent = '🎵';
+                        musicIcon.textContent = '▶️';
                         musicControl.classList.remove('playing');
                         isPlaying = false;
                     } else {
@@ -628,20 +630,33 @@
                             musicControl.classList.add('playing');
                             isPlaying = true;
                         }).catch(error => {
-                            console.log('Music autoplay prevented:', error);
-                            // Try to play on user interaction
-                            document.addEventListener('click', function() {
-                                music.play().then(() => {
-                                    musicIcon.textContent = '⏸️';
-                                    musicControl.classList.add('playing');
-                                    isPlaying = true;
-                                }).catch(e => console.log('Manual music play failed:', e));
-                            }, { once: true });
+                            console.log('Music play failed:', error);
+                            musicIcon.textContent = '▶️';
                         });
                     }
                 });
                 
-                // Auto-play music after user interaction
+                // Attempt autoplay immediately
+                const attemptAutoplay = () => {
+                    if (!autoplayAttempted) {
+                        autoplayAttempted = true;
+                        music.play().then(() => {
+                            console.log('Interstellar theme autoplay successful');
+                            musicIcon.textContent = '⏸️';
+                            musicControl.classList.add('playing');
+                            isPlaying = true;
+                        }).catch(error => {
+                            console.log('Autoplay prevented, waiting for user interaction:', error);
+                            // Show play button to indicate music is ready
+                            musicIcon.textContent = '▶️';
+                        });
+                    }
+                };
+                
+                // Try autoplay immediately
+                attemptAutoplay();
+                
+                // Auto-play music after user interaction if autoplay failed
                 const playMusicOnInteraction = () => {
                     if (!isPlaying) {
                         music.play().then(() => {
@@ -673,7 +688,7 @@
                     }
                 });
                 
-                console.log('Background music initialized');
+                console.log('Interstellar Main Theme background music initialized');
             }
         })();
         
