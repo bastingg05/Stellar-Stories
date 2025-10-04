@@ -33,10 +33,15 @@
             background: linear-gradient(135deg, #00ff88, #00d4ff);
             border-radius: 4px;
             border: 1px solid rgba(0, 212, 255, 0.3);
+            min-height: 20px;
         }
         
         ::-webkit-scrollbar-thumb:hover {
             background: linear-gradient(135deg, #00d4ff, #b19cd9);
+        }
+        
+        ::-webkit-scrollbar-thumb:active {
+            background: linear-gradient(135deg, #b19cd9, #00ff88);
         }
         
         /* Mobile scrollbar optimization */
@@ -48,6 +53,11 @@
             ::-webkit-scrollbar-thumb {
                 background: linear-gradient(135deg, #00ff88, #00d4ff);
                 border-radius: 3px;
+                min-height: 15px;
+            }
+            
+            ::-webkit-scrollbar-thumb:hover {
+                background: linear-gradient(135deg, #00d4ff, #b19cd9);
             }
         }
         
@@ -320,85 +330,104 @@
         }
         
         @media (max-width: 768px) {
-            .header { padding: 8px 10px; }
+            .header { padding: 6px 8px; }
             .hero { 
-                padding: 25px 10px 12px; 
+                padding: 20px 8px 10px; 
                 max-width: 100%; 
                 text-align: center;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
             }
             .features { 
                 grid-template-columns: 1fr; 
-                gap: 10px; 
+                gap: 8px; 
                 max-width: 100%; 
-                margin: 15px 0; 
+                margin: 12px 0; 
                 text-align: center;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
             }
-            .stats { gap: 10px; margin-top: 20px; text-align: center; }
-            .stat { padding: 8px; }
-            h1 { font-size: clamp(1.1rem, 2.8vw, 1.6rem); margin-bottom: 8px; }
-            .subtitle { font-size: clamp(0.8rem, 1.8vw, 0.95rem); margin-bottom: 15px; }
-            .cta { margin-top: 15px; padding: 8px 16px; font-size: 0.85em; }
-            .hero-badge { font-size: 0.7em; padding: 4px 10px; margin-bottom: 10px; }
-            .feature { padding: 8px 6px; margin-bottom: 8px; text-align: center; }
-            .feature h3 { font-size: 0.85em; margin-bottom: 4px; }
-            .feature p { font-size: 0.75em; line-height: 1.2; }
+            .stats { gap: 8px; margin-top: 15px; text-align: center; display: flex; justify-content: center; }
+            .stat { padding: 6px; }
+            h1 { font-size: clamp(0.9rem, 2.5vw, 1.4rem); margin-bottom: 6px; }
+            .subtitle { font-size: clamp(0.7rem, 1.6vw, 0.85rem); margin-bottom: 12px; }
+            .cta { margin-top: 12px; padding: 6px 14px; font-size: 0.8em; }
+            .hero-badge { font-size: 0.65em; padding: 3px 8px; margin-bottom: 8px; }
+            .feature { padding: 6px 4px; margin-bottom: 6px; text-align: center; width: 100%; max-width: 300px; }
+            .feature h3 { font-size: 0.8em; margin-bottom: 3px; }
+            .feature p { font-size: 0.7em; line-height: 1.1; }
         }
         
         @media (max-width: 480px) {
             .hero { 
-                padding: 15px 6px 8px; 
+                padding: 12px 4px 6px; 
                 text-align: center;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
             }
-            .hero-badge { font-size: 0.65em; padding: 3px 8px; margin-bottom: 6px; }
-            .subtitle { font-size: 0.75rem; margin-bottom: 10px; line-height: 1.2; }
-            .feature { 
-                padding: 6px 4px; 
-                margin-bottom: 6px; 
-                text-align: center;
-            }
-            .feature h3 { font-size: 0.8em; margin-bottom: 3px; }
-            .feature p { font-size: 0.7em; line-height: 1.1; }
-            .cta { 
-                padding: 6px 12px; 
-                font-size: 0.8em; 
-                margin-top: 10px; 
-                min-height: 32px;
-                min-width: 120px;
-                display: block;
-                margin-left: auto;
-                margin-right: auto;
-            }
-            h1 { font-size: clamp(0.9rem, 2.5vw, 1.3rem); margin-bottom: 5px; }
-            .stats { gap: 6px; margin-top: 15px; text-align: center; }
-            .stat-number { font-size: 1.3em; }
-            .stat-label { font-size: 0.65em; }
-        }
-        
-        @media (max-width: 360px) {
-            .hero { 
-                padding: 10px 4px 6px; 
-                text-align: center;
-            }
-            .hero-badge { font-size: 0.6em; padding: 2px 6px; }
-            h1 { font-size: clamp(0.8rem, 2.2vw, 1.1rem); margin-bottom: 4px; }
-            .subtitle { font-size: 0.7rem; margin-bottom: 8px; line-height: 1.1; }
+            .hero-badge { font-size: 0.6em; padding: 2px 6px; margin-bottom: 5px; }
+            .subtitle { font-size: 0.65rem; margin-bottom: 8px; line-height: 1.1; }
             .feature { 
                 padding: 4px 3px; 
                 margin-bottom: 4px; 
                 text-align: center;
+                width: 100%;
+                max-width: 280px;
             }
             .feature h3 { font-size: 0.75em; margin-bottom: 2px; }
-            .feature p { font-size: 0.65em; line-height: 1.1; }
+            .feature p { font-size: 0.65em; line-height: 1.05; }
             .cta { 
                 padding: 5px 10px; 
                 font-size: 0.75em; 
+                margin-top: 8px; 
                 min-height: 28px;
                 min-width: 100px;
-                margin-top: 8px;
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
             }
-            .stats { gap: 4px; margin-top: 10px; text-align: center; }
-            .stat-number { font-size: 1.1em; }
+            h1 { font-size: clamp(0.8rem, 2.2vw, 1.2rem); margin-bottom: 4px; }
+            .stats { gap: 4px; margin-top: 12px; text-align: center; display: flex; justify-content: center; }
+            .stat-number { font-size: 1.2em; }
             .stat-label { font-size: 0.6em; }
+        }
+        
+        @media (max-width: 360px) {
+            .hero { 
+                padding: 8px 3px 4px; 
+                text-align: center;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+            }
+            .hero-badge { font-size: 0.55em; padding: 2px 5px; }
+            h1 { font-size: clamp(0.7rem, 2vw, 1rem); margin-bottom: 3px; }
+            .subtitle { font-size: 0.6rem; margin-bottom: 6px; line-height: 1.05; }
+            .feature { 
+                padding: 3px 2px; 
+                margin-bottom: 3px; 
+                text-align: center;
+                width: 100%;
+                max-width: 260px;
+            }
+            .feature h3 { font-size: 0.7em; margin-bottom: 1px; }
+            .feature p { font-size: 0.6em; line-height: 1.05; }
+            .cta { 
+                padding: 4px 8px; 
+                font-size: 0.7em; 
+                min-height: 24px;
+                min-width: 90px;
+                margin-top: 6px;
+            }
+            .stats { gap: 3px; margin-top: 8px; text-align: center; display: flex; justify-content: center; }
+            .stat-number { font-size: 1em; }
+            .stat-label { font-size: 0.55em; }
         }
     </style>
 </head>
