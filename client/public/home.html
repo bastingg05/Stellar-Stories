@@ -501,11 +501,10 @@
         
         <!-- Background Music -->
         <audio id="backgroundMusic" loop preload="auto" volume="0.4" autoplay>
-            <source src="https://example.com/audio-to-url" type="audio/mpeg">
-            <source src="https://example.com/audio-to-url" type="audio/wav">
-            <source src="https://example.com/audio-to-url" type="audio/ogg">
             <source src="https://www.bensound.com/bensound-music/bensound-epic.mp3" type="audio/mpeg">
             <source src="https://www.bensound.com/bensound-music/bensound-cinematic.mp3" type="audio/mpeg">
+            <source src="https://www.bensound.com/bensound-music/bensound-dreams.mp3" type="audio/mpeg">
+            <source src="https://www.bensound.com/bensound-music/bensound-adventure.mp3" type="audio/mpeg">
             Your browser does not support the audio element.
         </audio>
         
@@ -592,30 +591,21 @@
                 // Set initial volume for Interstellar theme
                 music.volume = 0.4;
                 
-                // Handle audio loading errors
+                // Handle audio loading errors with better debugging
                 music.addEventListener('error', function(e) {
-                    console.log('Audio loading failed, trying alternative sources...');
-                    // Try to load alternative audio sources
-                    const alternativeSources = [
-                        'https://www.bensound.com/bensound-music/bensound-epic.mp3',
-                        'https://www.bensound.com/bensound-music/bensound-cinematic.mp3',
-                        'https://www.bensound.com/bensound-music/bensound-dreams.mp3'
-                    ];
-                    
-                    let currentSourceIndex = 0;
-                    const tryNextSource = () => {
-                        if (currentSourceIndex < alternativeSources.length) {
-                            music.src = alternativeSources[currentSourceIndex];
-                            music.load();
-                            currentSourceIndex++;
-                        } else {
-                            console.log('All audio sources failed, music disabled');
-                            musicControl.style.display = 'none';
-                        }
-                    };
-                    
-                    music.addEventListener('error', tryNextSource, { once: true });
-                    tryNextSource();
+                    console.error('Audio loading failed:', e);
+                    console.log('Current audio src:', music.src);
+                    console.log('Audio readyState:', music.readyState);
+                    console.log('Audio networkState:', music.networkState);
+                });
+                
+                // Log when audio loads successfully
+                music.addEventListener('loadeddata', function() {
+                    console.log('Audio loaded successfully:', music.src);
+                });
+                
+                music.addEventListener('canplay', function() {
+                    console.log('Audio can start playing:', music.src);
                 });
                 
                 // Music control click handler
