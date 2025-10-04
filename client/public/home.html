@@ -199,6 +199,49 @@
             height: 100%;
         }
         
+        /* Music Playing Indicator */
+        .music-indicator {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(0, 255, 136, 0.2);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(0, 255, 136, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #00ff88;
+            font-size: 1.2em;
+            z-index: 200;
+            animation: musicPulse 2s ease-in-out infinite;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .music-indicator:hover {
+            transform: scale(1.1);
+            background: rgba(0, 255, 136, 0.3);
+        }
+        
+        @keyframes musicPulse {
+            0%, 100% { box-shadow: 0 0 10px rgba(0, 255, 136, 0.3); }
+            50% { box-shadow: 0 0 25px rgba(0, 255, 136, 0.6); }
+        }
+        
+        /* Mobile music indicator */
+        @media (max-width: 768px) {
+            .music-indicator {
+                top: 15px;
+                right: 15px;
+                width: 40px;
+                height: 40px;
+                font-size: 1em;
+            }
+        }
+        
         /* Hero Section */
         .hero {
             position: relative;
@@ -546,6 +589,11 @@
             </div>
         </header>
         
+        <!-- Music Playing Indicator -->
+        <div id="musicIndicator" class="music-indicator" title="Interstellar music is playing">
+            🎵
+        </div>
+        
         
         <!-- Hero Section -->
         <section class="hero">
@@ -603,9 +651,10 @@
 
     <script>
         
-        // Hidden Spotify Interstellar Album Player with Autoplay
+        // Hidden Spotify Interstellar Album Player with Enhanced Autoplay
         (function initSpotifyPlayer() {
             const spotifyPlayer = document.getElementById('spotifyPlayer');
+            const musicIndicator = document.getElementById('musicIndicator');
             
             if (spotifyPlayer) {
                 console.log('Hidden Spotify Interstellar album player initialized');
@@ -614,8 +663,41 @@
                 if (iframe) {
                     iframe.addEventListener('load', function() {
                         console.log('Spotify player loaded successfully - autoplay enabled');
+                        
+                        // Show music indicator
+                        if (musicIndicator) {
+                            musicIndicator.style.display = 'flex';
+                        }
+                        
+                        // Additional autoplay trigger after iframe loads
+                        setTimeout(() => {
+                            try {
+                                // Try to trigger play command
+                                iframe.contentWindow.postMessage('{"command":"play"}', '*');
+                                console.log('Spotify autoplay triggered');
+                            } catch (error) {
+                                console.log('Autoplay trigger failed:', error);
+                            }
+                        }, 1000);
                     });
                 }
+                
+                // Enhanced autoplay on user interaction (fallback)
+                const triggerAutoplay = () => {
+                    if (iframe && iframe.contentWindow) {
+                        try {
+                            iframe.contentWindow.postMessage('{"command":"play"}', '*');
+                            console.log('Spotify autoplay triggered on user interaction');
+                        } catch (error) {
+                            console.log('User interaction autoplay failed:', error);
+                        }
+                    }
+                };
+                
+                // Try autoplay on first user interaction
+                document.addEventListener('click', triggerAutoplay, { once: true });
+                document.addEventListener('touchstart', triggerAutoplay, { once: true });
+                document.addEventListener('keydown', triggerAutoplay, { once: true });
                 
                 // Function to stop music when navigating away
                 window.stopSpotifyMusic = function() {
@@ -624,6 +706,12 @@
                         if (iframe && iframe.contentWindow) {
                             iframe.contentWindow.postMessage('{"command":"pause"}', '*');
                         }
+                        
+                        // Hide music indicator
+                        if (musicIndicator) {
+                            musicIndicator.style.display = 'none';
+                        }
+                        
                         console.log('Spotify music stopped');
                     } catch (error) {
                         console.log('Could not stop Spotify music:', error);
