@@ -227,7 +227,31 @@
         .chapter-library { width:100%; max-width: 1000px; margin: 20px auto 0; display:grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; }
         .chapter-card { background: rgba(10,20,40,0.7); border:1px solid rgba(0,212,255,0.25); border-radius:14px; overflow:hidden; box-shadow: 0 8px 24px rgba(0,0,0,0.4); cursor:pointer; }
         .chapter-card header { padding:10px 12px; color:#00d4ff; font-weight:800; letter-spacing:.3px; border-bottom:1px solid rgba(0,212,255,0.15); background: linear-gradient(180deg, rgba(0,212,255,0.08), rgba(0,255,136,0.06)); }
-        .chapter-card video { width:100%; height:160px; object-fit:cover; background:#000; display:block; }
+        .chapter-card video { 
+            width:100%; 
+            height:160px; 
+            object-fit:cover; 
+            background:#000; 
+            display:block; 
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+        }
+        
+        /* Mobile video optimization */
+        @media (max-width: 768px) {
+            .chapter-card video {
+                -webkit-playsinline: true;
+                playsinline: true;
+            }
+        }
+        
+        /* Visual indicator for paused videos */
+        .chapter-card video[poster] {
+            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%2300d4ff"><path d="M8 5v14l11-7z"/></svg>');
+            background-size: 40px 40px;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
         .chapter-card .caption { padding:10px 12px; color:#9bd; font-size:.9em; min-height:48px; }
 
         /* Responsive header and Home button */
@@ -738,9 +762,33 @@
           const shelf = document.getElementById('chapterLibrary');
           if(!shelf) return;
           shelf.querySelectorAll('.chapter-card').forEach((card)=>{
-            // Autoplay preview silently
+            // Mobile-optimized video handling
             const vid = card.querySelector('video');
-            if(vid){ vid.muted = true; vid.play().catch(()=>{}); }
+            if(vid){ 
+              vid.muted = true;
+              vid.setAttribute('webkit-playsinline', 'true');
+              vid.setAttribute('playsinline', 'true');
+              vid.setAttribute('x5-playsinline', 'true');
+              
+              // Try to play on load, but don't fail if it doesn't work
+              vid.play().catch(()=>{
+                console.log('Chapter video autoplay prevented, will play on interaction');
+              });
+              
+              // Add touch/click handlers for mobile video play
+              card.addEventListener('touchstart', function() {
+                if (vid.paused) {
+                  vid.play().catch(e => console.log('Touch play failed:', e));
+                }
+              });
+              
+              card.addEventListener('click', function() {
+                if (vid.paused) {
+                  vid.play().catch(e => console.log('Click play failed:', e));
+                }
+              });
+            }
+            
             card.addEventListener('click', ()=>{
               startStory();
               const target = Number(card.getAttribute('data-goto')||0);
@@ -750,6 +798,64 @@
               }
             });
           });
+        })();
+
+        // Enhanced video loading with mobile fallbacks
+        (function initVideoFallbacks() {
+            // Add fallback handling for all chapter videos
+            document.querySelectorAll('.chapter-card video').forEach(video => {
+                video.addEventListener('error', function(e) {
+                    console.log('Chapter video failed to load:', e);
+                    // Create a fallback image or placeholder
+                    const fallbackDiv = document.createElement('div');
+                    fallbackDiv.style.cssText = `
+                        width: 100%; 
+                        height: 160px; 
+                        background: linear-gradient(135deg, #0a0e27, #1a1a3e); 
+                        display: flex; 
+                        align-items: center; 
+                        justify-content: center; 
+                        color: #00d4ff; 
+                        font-size: 2em;
+                        border-radius: 8px;
+                    `;
+                    fallbackDiv.innerHTML = '▶';
+                    fallbackDiv.title = 'Click to play video';
+                    
+                    // Replace video with fallback
+                    video.parentNode.replaceChild(fallbackDiv, video);
+                    
+                    // Add click handler to fallback
+                    fallbackDiv.addEventListener('click', function() {
+                        // Try to reload the video
+                        const newVideo = document.createElement('video');
+                        newVideo.src = video.src;
+                        newVideo.muted = true;
+                        newVideo.playsinline = true;
+                        newVideo.autoplay = true;
+                        newVideo.loop = true;
+                        newVideo.style.cssText = video.style.cssText;
+                        
+                        newVideo.addEventListener('loadeddata', function() {
+                            console.log('Fallback video loaded successfully');
+                        });
+                        
+                        newVideo.addEventListener('error', function() {
+                            console.log('Fallback video also failed');
+                        });
+                        
+                        fallbackDiv.parentNode.replaceChild(newVideo, fallbackDiv);
+                    });
+                });
+                
+                video.addEventListener('loadstart', function() {
+                    console.log('Chapter video loading started');
+                });
+                
+                video.addEventListener('loadeddata', function() {
+                    console.log('Chapter video loaded successfully');
+                });
+            });
         })();
 
         // Wire Home button to redirect to home page
