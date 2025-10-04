@@ -390,7 +390,7 @@
 <body>
     <div class="zoom-container">
     <div class="video-background">
-        <video id="bgVideo" autoplay muted loop playsinline preload="auto" aria-hidden="true">
+        <video id="bgVideo" muted loop playsinline preload="auto" aria-hidden="true">
             <source src="https://cdn.pixabay.com/video/2024/06/30/218784_large.mp4" type="video/mp4" />
             Your browser does not support the video tag.
         </video>
@@ -775,19 +775,19 @@
                     document.body.style.background = 'linear-gradient(135deg, #0a0e27 0%, #1a1a3e 50%, #000 100%)';
                 });
                 
-                // Force play if autoplay fails
-                video.play().catch(function(error) {
-                    console.log('Autoplay prevented, trying manual play:', error);
-                    // Try to play on user interaction
-                    document.addEventListener('click', function() {
+                // Add click handler to start video manually
+                document.addEventListener('click', function() {
+                    if (video.paused) {
                         video.play().catch(e => console.log('Manual play failed:', e));
-                    }, { once: true });
-                    
-                    // Also try on touch for mobile
-                    document.addEventListener('touchstart', function() {
+                    }
+                }, { once: true });
+                
+                // Add touch handler for mobile
+                document.addEventListener('touchstart', function() {
+                    if (video.paused) {
                         video.play().catch(e => console.log('Touch play failed:', e));
-                    }, { once: true });
-                });
+                    }
+                }, { once: true });
             }
         })();
 
@@ -805,18 +805,7 @@
               vid.setAttribute('playsinline', 'true');
               vid.setAttribute('x5-playsinline', 'true');
               
-              // Add hover handler for desktop (play on hover, pause on leave)
-              card.addEventListener('mouseenter', function() {
-                if (vid.paused) {
-                  vid.play().catch(e => console.log('Hover play failed:', e));
-                }
-              });
-              
-              card.addEventListener('mouseleave', function() {
-                if (!vid.paused) {
-                  vid.pause();
-                }
-              });
+              // Note: Videos will only play on explicit user click/touch
               
               // Add touch/click handlers for mobile video play
               card.addEventListener('touchstart', function() {
@@ -968,16 +957,7 @@
 
                 currentScene = sceneIndex;
                 
-                // Auto-play video in the newly active scene (if it has one)
-                const activeScene = scenes[sceneIndex];
-                if (activeScene) {
-                    const video = activeScene.querySelector('video');
-                    if (video && video.paused) {
-                        video.play().catch(e => {
-                            console.log('Could not autoplay scene video:', e);
-                        });
-                    }
-                }
+                // Note: Videos will only play when user manually interacts with them
             }
 
             // Make updateActiveScene globally accessible
