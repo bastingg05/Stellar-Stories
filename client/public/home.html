@@ -554,9 +554,9 @@
             Your browser does not support the video tag.
         </video>
         
-        <!-- Stellar Sway Background Music -->
+        <!-- Interstellar Main Theme Background Music -->
         <audio id="backgroundMusic" loop preload="auto" volume="0.6">
-            <source src="https://www.bensound.com/bensound-music/bensound-stellar-sway.mp3" type="audio/mpeg">
+            <source src="https://res.cloudinary.com/drc1ded2t/video/upload/v1759596131/Interstellar_Main_Theme_Extra_Extended_Soundtrack_by_Hans_Zimmer_sboz7s.mp3" type="audio/mpeg">
             <source src="https://www.bensound.com/bensound-music/bensound-epic.mp3" type="audio/mpeg">
             <source src="https://www.bensound.com/bensound-music/bensound-cinematic.mp3" type="audio/mpeg">
             <source src="https://www.bensound.com/bensound-music/bensound-dreams.mp3" type="audio/mpeg">
@@ -574,7 +574,7 @@
         </header>
         
         <!-- Music Playing Indicator -->
-        <div id="musicIndicator" class="music-indicator" title="Stellar Sway music is playing">
+        <div id="musicIndicator" class="music-indicator" title="Interstellar Main Theme is playing">
             🎵
         </div>
         
@@ -635,7 +635,7 @@
 
     <script>
         
-        // Stellar Sway Background Music with Enhanced Autoplay
+        // Interstellar Main Theme Background Music with Enhanced Autoplay
         (function initBackgroundMusic() {
             const music = document.getElementById('backgroundMusic');
             const musicIndicator = document.getElementById('musicIndicator');
@@ -643,7 +643,7 @@
             let autoplayAttempted = false;
             
             if (music && musicIndicator) {
-                console.log('Stellar Sway background music initialized');
+                console.log('Interstellar Main Theme background music initialized');
                 
                 // Set initial volume
                 music.volume = 0.6;
@@ -656,7 +656,7 @@
                     if (!autoplayAttempted) {
                         autoplayAttempted = true;
                         music.play().then(() => {
-                            console.log('Stellar Sway music autoplay successful');
+                            console.log('Interstellar Main Theme autoplay successful');
                             isPlaying = true;
                             musicIndicator.style.display = 'flex';
                         }).catch(error => {
@@ -673,7 +673,7 @@
                 const triggerAutoplay = () => {
                     if (!isPlaying) {
                         music.play().then(() => {
-                            console.log('Stellar Sway music started on user interaction');
+                            console.log('Interstellar Main Theme started on user interaction');
                             isPlaying = true;
                             musicIndicator.style.display = 'flex';
                         }).catch(error => {
@@ -734,11 +734,11 @@
                 
                 // Log when audio loads successfully
                 music.addEventListener('loadeddata', function() {
-                    console.log('Stellar Sway audio loaded successfully');
+                    console.log('Interstellar Main Theme audio loaded successfully');
                 });
                 
                 music.addEventListener('canplay', function() {
-                    console.log('Stellar Sway audio can start playing');
+                    console.log('Interstellar Main Theme audio can start playing');
                 });
             }
         })();
