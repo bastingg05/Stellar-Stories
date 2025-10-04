@@ -800,10 +800,18 @@
             // Mobile-optimized video handling
             const vid = card.querySelector('video');
             if(vid){ 
+              // Ensure video is always muted
               vid.muted = true;
+              vid.setAttribute('muted', 'true');
               vid.setAttribute('webkit-playsinline', 'true');
               vid.setAttribute('playsinline', 'true');
               vid.setAttribute('x5-playsinline', 'true');
+              
+              // Add event listener to ensure video stays muted
+              vid.addEventListener('play', function() {
+                this.muted = true;
+                console.log('Chapter video playing (muted):', this.src);
+              });
               
               // Try to autoplay chapter videos
               vid.play().catch(()=>{
@@ -867,6 +875,15 @@
 
         // Enhanced video loading with mobile fallbacks
         (function initVideoFallbacks() {
+            // Ensure all chapter videos are muted
+            document.querySelectorAll('.chapter-card video').forEach(video => {
+                video.muted = true;
+                video.setAttribute('muted', 'true');
+                video.addEventListener('play', function() {
+                    this.muted = true;
+                });
+            });
+            
             // Add fallback handling for all chapter videos
             document.querySelectorAll('.chapter-card video').forEach(video => {
                 video.addEventListener('error', function(e) {
