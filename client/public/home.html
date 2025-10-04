@@ -499,12 +499,13 @@
             Your browser does not support the video tag.
         </video>
         
-        <!-- Background Music -->
+        <!-- Background Music - Google Drive Audio -->
         <audio id="backgroundMusic" loop preload="auto" volume="0.4" autoplay>
+            <source src="https://drive.google.com/uc?export=download&id=1_E9IQ5cJX0Ma9A1BFqSE5n9Fwi90-EWz" type="audio/mpeg">
+            <source src="https://drive.google.com/uc?export=download&id=1_E9IQ5cJX0Ma9A1BFqSE5n9Fwi90-EWz" type="audio/wav">
+            <source src="https://drive.google.com/uc?export=download&id=1_E9IQ5cJX0Ma9A1BFqSE5n9Fwi90-EWz" type="audio/ogg">
             <source src="https://www.bensound.com/bensound-music/bensound-epic.mp3" type="audio/mpeg">
             <source src="https://www.bensound.com/bensound-music/bensound-cinematic.mp3" type="audio/mpeg">
-            <source src="https://www.bensound.com/bensound-music/bensound-dreams.mp3" type="audio/mpeg">
-            <source src="https://www.bensound.com/bensound-music/bensound-adventure.mp3" type="audio/mpeg">
             Your browser does not support the audio element.
         </audio>
         
@@ -579,7 +580,7 @@
 
     <script>
         
-        // Background Music Management - Custom Audio Source
+        // Background Music Management - Google Drive Audio
         (function initBackgroundMusic() {
             const music = document.getElementById('backgroundMusic');
             const musicControl = document.getElementById('musicControl');
@@ -632,7 +633,7 @@
                     if (!autoplayAttempted) {
                         autoplayAttempted = true;
                         music.play().then(() => {
-                            console.log('Custom audio autoplay successful');
+                            console.log('Google Drive audio autoplay successful');
                             musicIcon.textContent = '⏸️';
                             musicControl.classList.add('playing');
                             isPlaying = true;
@@ -679,7 +680,7 @@
                     }
                 });
                 
-                console.log('Background music initialized with custom audio source');
+                console.log('Background music initialized with Google Drive audio');
             }
         })();
         
