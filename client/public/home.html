@@ -177,6 +177,55 @@
             }
         }
         
+        /* Spotify Player Styling */
+        .spotify-player {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 300px;
+            height: 352px;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(15px);
+            border-radius: 15px;
+            border: 2px solid rgba(0, 212, 255, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.2);
+            z-index: 150;
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+        
+        .spotify-player:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 212, 255, 0.4);
+            border-color: rgba(0, 212, 255, 0.6);
+        }
+        
+        .spotify-player iframe {
+            border-radius: 12px;
+            width: 100%;
+            height: 100%;
+        }
+        
+        /* Mobile Spotify Player */
+        @media (max-width: 768px) {
+            .spotify-player {
+                bottom: 15px;
+                right: 15px;
+                width: 280px;
+                height: 320px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .spotify-player {
+                bottom: 10px;
+                right: 10px;
+                width: calc(100vw - 20px);
+                max-width: 300px;
+                height: 300px;
+            }
+        }
+        
         /* Hero Section */
         .hero {
             position: relative;
@@ -499,15 +548,20 @@
             Your browser does not support the video tag.
         </video>
         
-        <!-- Background Music - Google Drive Audio -->
-        <audio id="backgroundMusic" loop preload="auto" volume="0.4" autoplay>
-            <source src="https://drive.google.com/uc?export=download&id=1_E9IQ5cJX0Ma9A1BFqSE5n9Fwi90-EWz" type="audio/mpeg">
-            <source src="https://drive.google.com/uc?export=download&id=1_E9IQ5cJX0Ma9A1BFqSE5n9Fwi90-EWz" type="audio/wav">
-            <source src="https://drive.google.com/uc?export=download&id=1_E9IQ5cJX0Ma9A1BFqSE5n9Fwi90-EWz" type="audio/ogg">
-            <source src="https://www.bensound.com/bensound-music/bensound-epic.mp3" type="audio/mpeg">
-            <source src="https://www.bensound.com/bensound-music/bensound-cinematic.mp3" type="audio/mpeg">
-            Your browser does not support the audio element.
-        </audio>
+        <!-- Spotify Interstellar Album Embed -->
+        <div id="spotifyPlayer" class="spotify-player">
+            <iframe 
+                data-testid="embed-iframe" 
+                style="border-radius:12px" 
+                src="https://open.spotify.com/embed/album/2dZ8JUTMTOqU6vpRL0qoG9?utm_source=generator" 
+                width="100%" 
+                height="352" 
+                frameBorder="0" 
+                allowfullscreen="" 
+                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
+                loading="lazy">
+            </iframe>
+        </div>
         
         
         
@@ -519,10 +573,6 @@
             </div>
         </header>
         
-        <!-- Music Control Button -->
-        <button id="musicControl" class="music-control" aria-label="Toggle background music">
-            <span id="musicIcon">🎵</span>
-        </button>
         
         <!-- Hero Section -->
         <section class="hero">
@@ -580,107 +630,33 @@
 
     <script>
         
-        // Background Music Management - Google Drive Audio
-        (function initBackgroundMusic() {
-            const music = document.getElementById('backgroundMusic');
-            const musicControl = document.getElementById('musicControl');
-            const musicIcon = document.getElementById('musicIcon');
-            let isPlaying = false;
-            let autoplayAttempted = false;
+        // Spotify Interstellar Album Player
+        (function initSpotifyPlayer() {
+            const spotifyPlayer = document.getElementById('spotifyPlayer');
             
-            if (music && musicControl) {
-                // Set initial volume for Interstellar theme
-                music.volume = 0.4;
+            if (spotifyPlayer) {
+                console.log('Spotify Interstellar album player initialized');
                 
-                // Handle audio loading errors with better debugging
-                music.addEventListener('error', function(e) {
-                    console.error('Audio loading failed:', e);
-                    console.log('Current audio src:', music.src);
-                    console.log('Audio readyState:', music.readyState);
-                    console.log('Audio networkState:', music.networkState);
-                });
+                // Add a subtle animation when the iframe loads
+                const iframe = spotifyPlayer.querySelector('iframe');
+                if (iframe) {
+                    iframe.addEventListener('load', function() {
+                        console.log('Spotify player loaded successfully');
+                        spotifyPlayer.style.opacity = '1';
+                        spotifyPlayer.style.transform = 'translateY(0)';
+                    });
+                }
                 
-                // Log when audio loads successfully
-                music.addEventListener('loadeddata', function() {
-                    console.log('Audio loaded successfully:', music.src);
-                });
+                // Initial styling for smooth appearance
+                spotifyPlayer.style.opacity = '0';
+                spotifyPlayer.style.transform = 'translateY(20px)';
+                spotifyPlayer.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
                 
-                music.addEventListener('canplay', function() {
-                    console.log('Audio can start playing:', music.src);
-                });
-                
-                // Music control click handler
-                musicControl.addEventListener('click', function() {
-                    if (isPlaying) {
-                        music.pause();
-                        musicIcon.textContent = '▶️';
-                        musicControl.classList.remove('playing');
-                        isPlaying = false;
-                    } else {
-                        music.play().then(() => {
-                            musicIcon.textContent = '⏸️';
-                            musicControl.classList.add('playing');
-                            isPlaying = true;
-                        }).catch(error => {
-                            console.log('Music play failed:', error);
-                            musicIcon.textContent = '▶️';
-                        });
-                    }
-                });
-                
-                // Attempt autoplay immediately
-                const attemptAutoplay = () => {
-                    if (!autoplayAttempted) {
-                        autoplayAttempted = true;
-                        music.play().then(() => {
-                            console.log('Google Drive audio autoplay successful');
-                            musicIcon.textContent = '⏸️';
-                            musicControl.classList.add('playing');
-                            isPlaying = true;
-                        }).catch(error => {
-                            console.log('Autoplay prevented, waiting for user interaction:', error);
-                            // Show play button to indicate music is ready
-                            musicIcon.textContent = '▶️';
-                        });
-                    }
-                };
-                
-                // Try autoplay immediately
-                attemptAutoplay();
-                
-                // Auto-play music after user interaction if autoplay failed
-                const playMusicOnInteraction = () => {
-                    if (!isPlaying) {
-                        music.play().then(() => {
-                            musicIcon.textContent = '⏸️';
-                            musicControl.classList.add('playing');
-                            isPlaying = true;
-                        }).catch(e => console.log('Auto-play music failed:', e));
-                    }
-                };
-                
-                // Try to play music on first user interaction
-                document.addEventListener('click', playMusicOnInteraction, { once: true });
-                document.addEventListener('touchstart', playMusicOnInteraction, { once: true });
-                
-                // Stop music when navigating away
-                window.addEventListener('beforeunload', function() {
-                    if (music && !music.paused) {
-                        music.pause();
-                        music.currentTime = 0;
-                    }
-                });
-                
-                // Handle page visibility changes
-                document.addEventListener('visibilitychange', function() {
-                    if (document.hidden && isPlaying) {
-                        music.pause();
-                    } else if (!document.hidden && isPlaying) {
-                        music.play().catch(e => console.log('Resume music failed:', e));
-                    }
-                });
-                
-                console.log('Background music initialized with Google Drive audio');
+                // Fade in after a short delay
+                setTimeout(() => {
+                    spotifyPlayer.style.opacity = '1';
+                    spotifyPlayer.style.transform = 'translateY(0)';
+                }, 1000);
             }
         })();
         
@@ -747,13 +723,6 @@
         
         // Enhanced button interaction
         document.getElementById('start').addEventListener('click', function() {
-            // Stop background music before navigation
-            const music = document.getElementById('backgroundMusic');
-            if (music && !music.paused) {
-                music.pause();
-                music.currentTime = 0;
-            }
-            
             // Add a subtle loading effect
             this.style.transform = 'scale(0.95)';
             this.innerHTML = 'Launching... 🚀';
