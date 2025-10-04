@@ -177,8 +177,8 @@
             }
         }
         
-        /* Hidden Spotify Player Styling */
-        .spotify-player {
+        /* Hidden Audio Player Styling */
+        #backgroundMusic {
             position: fixed;
             top: -1000px;
             left: -1000px;
@@ -187,16 +187,6 @@
             opacity: 0;
             visibility: hidden;
             z-index: -1;
-            overflow: hidden;
-        }
-        
-        .spotify-player.hidden {
-            display: none;
-        }
-        
-        .spotify-player iframe {
-            width: 100%;
-            height: 100%;
         }
         
         /* Music Playing Indicator */
@@ -564,20 +554,14 @@
             Your browser does not support the video tag.
         </video>
         
-        <!-- Hidden Spotify Interstellar Album Embed -->
-        <div id="spotifyPlayer" class="spotify-player hidden">
-            <iframe 
-                data-testid="embed-iframe" 
-                style="border-radius:12px" 
-                src="https://open.spotify.com/embed/album/2dZ8JUTMTOqU6vpRL0qoG9?utm_source=generator&autoplay=true" 
-                width="100%" 
-                height="352" 
-                frameBorder="0" 
-                allowfullscreen="" 
-                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
-                loading="lazy">
-            </iframe>
-        </div>
+        <!-- Interstellar Background Music -->
+        <audio id="backgroundMusic" loop preload="auto" volume="0.6">
+            <source src="https://www.bensound.com/bensound-music/bensound-epic.mp3" type="audio/mpeg">
+            <source src="https://www.bensound.com/bensound-music/bensound-cinematic.mp3" type="audio/mpeg">
+            <source src="https://www.bensound.com/bensound-music/bensound-dreams.mp3" type="audio/mpeg">
+            <source src="https://www.bensound.com/bensound-music/bensound-adventure.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
         
         
         
@@ -651,46 +635,50 @@
 
     <script>
         
-        // Hidden Spotify Interstellar Album Player with Enhanced Autoplay
-        (function initSpotifyPlayer() {
-            const spotifyPlayer = document.getElementById('spotifyPlayer');
+        // Interstellar Background Music with Enhanced Autoplay
+        (function initBackgroundMusic() {
+            const music = document.getElementById('backgroundMusic');
             const musicIndicator = document.getElementById('musicIndicator');
+            let isPlaying = false;
+            let autoplayAttempted = false;
             
-            if (spotifyPlayer) {
-                console.log('Hidden Spotify Interstellar album player initialized');
+            if (music && musicIndicator) {
+                console.log('Interstellar background music initialized');
                 
-                const iframe = spotifyPlayer.querySelector('iframe');
-                if (iframe) {
-                    iframe.addEventListener('load', function() {
-                        console.log('Spotify player loaded successfully - autoplay enabled');
-                        
-                        // Show music indicator
-                        if (musicIndicator) {
+                // Set initial volume
+                music.volume = 0.6;
+                
+                // Show music indicator immediately
+                musicIndicator.style.display = 'flex';
+                
+                // Enhanced autoplay function
+                const attemptAutoplay = () => {
+                    if (!autoplayAttempted) {
+                        autoplayAttempted = true;
+                        music.play().then(() => {
+                            console.log('Interstellar music autoplay successful');
+                            isPlaying = true;
                             musicIndicator.style.display = 'flex';
-                        }
-                        
-                        // Additional autoplay trigger after iframe loads
-                        setTimeout(() => {
-                            try {
-                                // Try to trigger play command
-                                iframe.contentWindow.postMessage('{"command":"play"}', '*');
-                                console.log('Spotify autoplay triggered');
-                            } catch (error) {
-                                console.log('Autoplay trigger failed:', error);
-                            }
-                        }, 1000);
-                    });
-                }
+                        }).catch(error => {
+                            console.log('Autoplay prevented, waiting for user interaction:', error);
+                            musicIndicator.style.display = 'flex';
+                        });
+                    }
+                };
+                
+                // Try autoplay immediately
+                attemptAutoplay();
                 
                 // Enhanced autoplay on user interaction (fallback)
                 const triggerAutoplay = () => {
-                    if (iframe && iframe.contentWindow) {
-                        try {
-                            iframe.contentWindow.postMessage('{"command":"play"}', '*');
-                            console.log('Spotify autoplay triggered on user interaction');
-                        } catch (error) {
+                    if (!isPlaying) {
+                        music.play().then(() => {
+                            console.log('Interstellar music started on user interaction');
+                            isPlaying = true;
+                            musicIndicator.style.display = 'flex';
+                        }).catch(error => {
                             console.log('User interaction autoplay failed:', error);
-                        }
+                        });
                     }
                 };
                 
@@ -699,33 +687,58 @@
                 document.addEventListener('touchstart', triggerAutoplay, { once: true });
                 document.addEventListener('keydown', triggerAutoplay, { once: true });
                 
+                // Music control via indicator click
+                musicIndicator.addEventListener('click', function() {
+                    if (isPlaying) {
+                        music.pause();
+                        musicIndicator.style.display = 'none';
+                        isPlaying = false;
+                        console.log('Music paused');
+                    } else {
+                        music.play().then(() => {
+                            musicIndicator.style.display = 'flex';
+                            isPlaying = true;
+                            console.log('Music resumed');
+                        }).catch(error => {
+                            console.log('Music play failed:', error);
+                        });
+                    }
+                });
+                
                 // Function to stop music when navigating away
-                window.stopSpotifyMusic = function() {
-                    try {
-                        // Try to pause the Spotify iframe
-                        if (iframe && iframe.contentWindow) {
-                            iframe.contentWindow.postMessage('{"command":"pause"}', '*');
-                        }
-                        
-                        // Hide music indicator
-                        if (musicIndicator) {
-                            musicIndicator.style.display = 'none';
-                        }
-                        
-                        console.log('Spotify music stopped');
-                    } catch (error) {
-                        console.log('Could not stop Spotify music:', error);
+                window.stopBackgroundMusic = function() {
+                    if (music && !music.paused) {
+                        music.pause();
+                        music.currentTime = 0;
+                        musicIndicator.style.display = 'none';
+                        isPlaying = false;
+                        console.log('Background music stopped');
                     }
                 };
                 
                 // Stop music when page is about to unload
                 window.addEventListener('beforeunload', function() {
-                    window.stopSpotifyMusic();
+                    window.stopBackgroundMusic();
                 });
                 
                 // Stop music when navigating to other pages
                 window.addEventListener('pagehide', function() {
-                    window.stopSpotifyMusic();
+                    window.stopBackgroundMusic();
+                });
+                
+                // Handle audio loading errors
+                music.addEventListener('error', function(e) {
+                    console.error('Audio loading failed:', e);
+                    musicIndicator.style.display = 'none';
+                });
+                
+                // Log when audio loads successfully
+                music.addEventListener('loadeddata', function() {
+                    console.log('Interstellar audio loaded successfully');
+                });
+                
+                music.addEventListener('canplay', function() {
+                    console.log('Interstellar audio can start playing');
                 });
             }
         })();
@@ -793,9 +806,9 @@
         
         // Enhanced button interaction
         document.getElementById('start').addEventListener('click', function() {
-            // Stop Spotify music before navigation
-            if (window.stopSpotifyMusic) {
-                window.stopSpotifyMusic();
+            // Stop background music before navigation
+            if (window.stopBackgroundMusic) {
+                window.stopBackgroundMusic();
             }
             
             // Add a subtle loading effect
