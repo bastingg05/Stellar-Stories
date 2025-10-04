@@ -189,48 +189,6 @@
             z-index: -1;
         }
         
-        /* Music Playing Indicator */
-        .music-indicator {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: rgba(0, 255, 136, 0.2);
-            backdrop-filter: blur(10px);
-            border: 2px solid rgba(0, 255, 136, 0.5);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #00ff88;
-            font-size: 1.2em;
-            z-index: 200;
-            animation: musicPulse 2s ease-in-out infinite;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .music-indicator:hover {
-            transform: scale(1.1);
-            background: rgba(0, 255, 136, 0.3);
-        }
-        
-        @keyframes musicPulse {
-            0%, 100% { box-shadow: 0 0 10px rgba(0, 255, 136, 0.3); }
-            50% { box-shadow: 0 0 25px rgba(0, 255, 136, 0.6); }
-        }
-        
-        /* Mobile music indicator */
-        @media (max-width: 768px) {
-            .music-indicator {
-                top: 15px;
-                right: 15px;
-                width: 40px;
-                height: 40px;
-                font-size: 1em;
-            }
-        }
         
         /* Hero Section */
         .hero {
@@ -573,10 +531,6 @@
             </div>
         </header>
         
-        <!-- Music Playing Indicator -->
-        <div id="musicIndicator" class="music-indicator" title="Interstellar Main Theme is playing">
-            🎵
-        </div>
         
         
         <!-- Hero Section -->
@@ -635,21 +589,17 @@
 
     <script>
         
-        // Interstellar Main Theme Background Music with Enhanced Autoplay
+        // Interstellar Main Theme Background Music - Autoplay Only
         (function initBackgroundMusic() {
             const music = document.getElementById('backgroundMusic');
-            const musicIndicator = document.getElementById('musicIndicator');
             let isPlaying = false;
             let autoplayAttempted = false;
             
-            if (music && musicIndicator) {
+            if (music) {
                 console.log('Interstellar Main Theme background music initialized');
                 
                 // Set initial volume
                 music.volume = 0.6;
-                
-                // Show music indicator immediately
-                musicIndicator.style.display = 'flex';
                 
                 // Enhanced autoplay function
                 const attemptAutoplay = () => {
@@ -658,10 +608,8 @@
                         music.play().then(() => {
                             console.log('Interstellar Main Theme autoplay successful');
                             isPlaying = true;
-                            musicIndicator.style.display = 'flex';
                         }).catch(error => {
                             console.log('Autoplay prevented, waiting for user interaction:', error);
-                            musicIndicator.style.display = 'flex';
                         });
                     }
                 };
@@ -675,7 +623,6 @@
                         music.play().then(() => {
                             console.log('Interstellar Main Theme started on user interaction');
                             isPlaying = true;
-                            musicIndicator.style.display = 'flex';
                         }).catch(error => {
                             console.log('User interaction autoplay failed:', error);
                         });
@@ -687,30 +634,11 @@
                 document.addEventListener('touchstart', triggerAutoplay, { once: true });
                 document.addEventListener('keydown', triggerAutoplay, { once: true });
                 
-                // Music control via indicator click
-                musicIndicator.addEventListener('click', function() {
-                    if (isPlaying) {
-                        music.pause();
-                        musicIndicator.style.display = 'none';
-                        isPlaying = false;
-                        console.log('Music paused');
-                    } else {
-                        music.play().then(() => {
-                            musicIndicator.style.display = 'flex';
-                            isPlaying = true;
-                            console.log('Music resumed');
-                        }).catch(error => {
-                            console.log('Music play failed:', error);
-                        });
-                    }
-                });
-                
                 // Function to stop music when navigating away
                 window.stopBackgroundMusic = function() {
                     if (music && !music.paused) {
                         music.pause();
                         music.currentTime = 0;
-                        musicIndicator.style.display = 'none';
                         isPlaying = false;
                         console.log('Background music stopped');
                     }
@@ -729,7 +657,6 @@
                 // Handle audio loading errors
                 music.addEventListener('error', function(e) {
                     console.error('Audio loading failed:', e);
-                    musicIndicator.style.display = 'none';
                 });
                 
                 // Log when audio loads successfully
