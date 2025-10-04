@@ -443,7 +443,7 @@
 <body>
     <div class="wrap">
         <!-- Enhanced Video Background -->
-        <video id="homeVideo" class="bgvideo" autoplay muted loop playsinline preload="auto" aria-hidden="true">
+        <video id="homeVideo" class="bgvideo" muted loop playsinline preload="auto" aria-hidden="true">
             <source src="https://res.cloudinary.com/drc1ded2t/video/upload/v1759381412/192935-893872011_small_loaqcq.mp4" type="video/mp4" />
             Your browser does not support the video tag.
         </video>
@@ -557,19 +557,21 @@
                     video.load();
                 });
                 
-                // Force play if autoplay fails
-                video.play().catch(function(error) {
-                    console.log('Autoplay prevented, trying manual play:', error);
-                    // Try to play on user interaction
-                    document.addEventListener('click', function() {
+                // Note: Background video will only play when user manually interacts with it
+                
+                // Add click handler to start video manually
+                document.addEventListener('click', function() {
+                    if (video.paused) {
                         video.play().catch(e => console.log('Manual play failed:', e));
-                    }, { once: true });
-                    
-                    // Also try on touch for mobile
-                    document.addEventListener('touchstart', function() {
+                    }
+                }, { once: true });
+                
+                // Add touch handler for mobile
+                document.addEventListener('touchstart', function() {
+                    if (video.paused) {
                         video.play().catch(e => console.log('Touch play failed:', e));
-                    }, { once: true });
-                });
+                    }
+                }, { once: true });
             } else {
                 console.error('Video element not found!');
             }
