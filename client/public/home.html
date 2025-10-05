@@ -125,57 +125,6 @@
             background-clip: text;
         }
         
-        /* Music Control Button */
-        .music-control {
-            position: fixed;
-            top: 20px;
-            right: 30px;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(10px);
-            border: 2px solid rgba(0, 212, 255, 0.3);
-            color: #00d4ff;
-            font-size: 1.2em;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-            z-index: 200;
-            box-shadow: 0 4px 15px rgba(0, 212, 255, 0.2);
-        }
-        
-        .music-control:hover {
-            background: rgba(0, 0, 0, 0.8);
-            border-color: rgba(0, 212, 255, 0.6);
-            transform: scale(1.1);
-            box-shadow: 0 6px 20px rgba(0, 212, 255, 0.4);
-        }
-        
-        .music-control.playing {
-            background: rgba(0, 255, 136, 0.2);
-            border-color: rgba(0, 255, 136, 0.5);
-            color: #00ff88;
-            animation: musicPulse 2s ease-in-out infinite;
-        }
-        
-        @keyframes musicPulse {
-            0%, 100% { box-shadow: 0 4px 15px rgba(0, 255, 136, 0.2); }
-            50% { box-shadow: 0 6px 25px rgba(0, 255, 136, 0.5); }
-        }
-        
-        /* Mobile music control */
-        @media (max-width: 768px) {
-            .music-control {
-                top: 15px;
-                right: 15px;
-                width: 40px;
-                height: 40px;
-                font-size: 1em;
-            }
-        }
         
         /* Hidden Audio Player Styling */
         #backgroundMusic {
@@ -520,10 +469,6 @@
             Your browser does not support the audio element.
         </audio>
         
-        <!-- Music Control Button -->
-        <button id="musicToggle" class="music-control" aria-label="Toggle background music">
-            ♪
-        </button>
         
         <!-- Header -->
         <header class="header">
@@ -591,37 +536,50 @@
 
     <script>
         
-        // Interstellar Main Theme Background Music - Manual Control Only
+        // Interstellar Main Theme Background Music - Autoplay with Higher Volume
         (function initBackgroundMusic() {
             const music = document.getElementById('backgroundMusic');
-            const musicToggle = document.getElementById('musicToggle');
             let isPlaying = false;
+            let autoplayAttempted = false;
             
-            if (music && musicToggle) {
-                console.log('Interstellar Main Theme background music initialized (manual control only)');
+            if (music) {
+                console.log('Interstellar Main Theme background music initialized with autoplay');
                 
-                // Set initial volume
-                music.volume = 0.6;
+                // Set higher volume (increased from 0.6 to 0.8)
+                music.volume = 0.8;
                 
-                // Music toggle functionality (no autoplay)
-                musicToggle.addEventListener('click', function() {
-                    if (isPlaying) {
-                        music.pause();
-                        isPlaying = false;
-                        this.classList.remove('playing');
-                        this.innerHTML = '♪';
-                        console.log('Background music paused');
-                    } else {
+                // Enhanced autoplay function
+                const attemptAutoplay = () => {
+                    if (!autoplayAttempted) {
+                        autoplayAttempted = true;
                         music.play().then(() => {
+                            console.log('Interstellar Main Theme autoplay successful');
                             isPlaying = true;
-                            this.classList.add('playing');
-                            this.innerHTML = '♫';
-                            console.log('Background music started');
                         }).catch(error => {
-                            console.log('Failed to start music:', error);
+                            console.log('Autoplay prevented, waiting for user interaction:', error);
                         });
                     }
-                });
+                };
+                
+                // Try autoplay immediately
+                attemptAutoplay();
+                
+                // Enhanced autoplay on user interaction (fallback)
+                const triggerAutoplay = () => {
+                    if (!isPlaying) {
+                        music.play().then(() => {
+                            console.log('Interstellar Main Theme started on user interaction');
+                            isPlaying = true;
+                        }).catch(error => {
+                            console.log('User interaction autoplay failed:', error);
+                        });
+                    }
+                };
+                
+                // Try autoplay on first user interaction
+                document.addEventListener('click', triggerAutoplay, { once: true });
+                document.addEventListener('touchstart', triggerAutoplay, { once: true });
+                document.addEventListener('keydown', triggerAutoplay, { once: true });
                 
                 // Function to stop music when navigating away
                 window.stopBackgroundMusic = function() {
@@ -629,8 +587,6 @@
                         music.pause();
                         music.currentTime = 0;
                         isPlaying = false;
-                        musicToggle.classList.remove('playing');
-                        musicToggle.innerHTML = '♪';
                         console.log('Background music stopped');
                     }
                 };
