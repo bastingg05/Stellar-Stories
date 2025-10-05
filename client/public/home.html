@@ -125,8 +125,69 @@
             background-clip: text;
         }
         
+        /* Music Control Button */
+        .music-control {
+            position: fixed;
+            top: 20px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(0, 212, 255, 0.3);
+            color: #00d4ff;
+            font-size: 1.2em;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 200;
+            box-shadow: 0 4px 15px rgba(0, 212, 255, 0.2);
+        }
         
+        .music-control:hover {
+            background: rgba(0, 0, 0, 0.8);
+            border-color: rgba(0, 212, 255, 0.6);
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0, 212, 255, 0.4);
+        }
         
+        .music-control.playing {
+            background: rgba(0, 255, 136, 0.2);
+            border-color: rgba(0, 255, 136, 0.5);
+            color: #00ff88;
+            animation: musicPulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes musicPulse {
+            0%, 100% { box-shadow: 0 4px 15px rgba(0, 255, 136, 0.2); }
+            50% { box-shadow: 0 6px 25px rgba(0, 255, 136, 0.5); }
+        }
+        
+        /* Mobile music control */
+        @media (max-width: 768px) {
+            .music-control {
+                top: 15px;
+                right: 15px;
+                width: 40px;
+                height: 40px;
+                font-size: 1em;
+            }
+        }
+        
+        /* Hidden Audio Player Styling */
+        #backgroundMusic {
+            position: fixed;
+            top: -1000px;
+            left: -1000px;
+            width: 1px;
+            height: 1px;
+            opacity: 0;
+            visibility: hidden;
+            z-index: -1;
+        }
         
         /* Hero Section */
         .hero {
@@ -450,8 +511,19 @@
             Your browser does not support the video tag.
         </video>
         
+        <!-- Interstellar Main Theme Background Music -->
+        <audio id="backgroundMusic" loop preload="auto" volume="0.6">
+            <source src="https://res.cloudinary.com/drc1ded2t/video/upload/v1759596131/Interstellar_Main_Theme_Extra_Extended_Soundtrack_by_Hans_Zimmer_sboz7s.mp3" type="audio/mpeg">
+            <source src="https://www.bensound.com/bensound-music/bensound-epic.mp3" type="audio/mpeg">
+            <source src="https://www.bensound.com/bensound-music/bensound-cinematic.mp3" type="audio/mpeg">
+            <source src="https://www.bensound.com/bensound-music/bensound-dreams.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
         
-        
+        <!-- Music Control Button -->
+        <button id="musicToggle" class="music-control" aria-label="Toggle background music">
+            ♪
+        </button>
         
         <!-- Header -->
         <header class="header">
@@ -519,6 +591,113 @@
 
     <script>
         
+        // Interstellar Main Theme Background Music - Autoplay Only
+        (function initBackgroundMusic() {
+            const music = document.getElementById('backgroundMusic');
+            const musicToggle = document.getElementById('musicToggle');
+            let isPlaying = false;
+            let autoplayAttempted = false;
+            
+            if (music && musicToggle) {
+                console.log('Interstellar Main Theme background music initialized');
+                
+                // Set initial volume
+                music.volume = 0.6;
+                
+                // Enhanced autoplay function
+                const attemptAutoplay = () => {
+                    if (!autoplayAttempted) {
+                        autoplayAttempted = true;
+                        music.play().then(() => {
+                            console.log('Interstellar Main Theme autoplay successful');
+                            isPlaying = true;
+                            musicToggle.classList.add('playing');
+                            musicToggle.innerHTML = '♫';
+                        }).catch(error => {
+                            console.log('Autoplay prevented, waiting for user interaction:', error);
+                        });
+                    }
+                };
+                
+                // Try autoplay immediately
+                attemptAutoplay();
+                
+                // Enhanced autoplay on user interaction (fallback)
+                const triggerAutoplay = () => {
+                    if (!isPlaying) {
+                        music.play().then(() => {
+                            console.log('Interstellar Main Theme started on user interaction');
+                            isPlaying = true;
+                            musicToggle.classList.add('playing');
+                            musicToggle.innerHTML = '♫';
+                        }).catch(error => {
+                            console.log('User interaction autoplay failed:', error);
+                        });
+                    }
+                };
+                
+                // Try autoplay on first user interaction
+                document.addEventListener('click', triggerAutoplay, { once: true });
+                document.addEventListener('touchstart', triggerAutoplay, { once: true });
+                document.addEventListener('keydown', triggerAutoplay, { once: true });
+                
+                // Music toggle functionality
+                musicToggle.addEventListener('click', function() {
+                    if (isPlaying) {
+                        music.pause();
+                        isPlaying = false;
+                        this.classList.remove('playing');
+                        this.innerHTML = '♪';
+                        console.log('Background music paused');
+                    } else {
+                        music.play().then(() => {
+                            isPlaying = true;
+                            this.classList.add('playing');
+                            this.innerHTML = '♫';
+                            console.log('Background music resumed');
+                        }).catch(error => {
+                            console.log('Failed to resume music:', error);
+                        });
+                    }
+                });
+                
+                // Function to stop music when navigating away
+                window.stopBackgroundMusic = function() {
+                    if (music && !music.paused) {
+                        music.pause();
+                        music.currentTime = 0;
+                        isPlaying = false;
+                        musicToggle.classList.remove('playing');
+                        musicToggle.innerHTML = '♪';
+                        console.log('Background music stopped');
+                    }
+                };
+                
+                // Stop music when page is about to unload
+                window.addEventListener('beforeunload', function() {
+                    window.stopBackgroundMusic();
+                });
+                
+                // Stop music when navigating to other pages
+                window.addEventListener('pagehide', function() {
+                    window.stopBackgroundMusic();
+                });
+                
+                // Handle audio loading errors
+                music.addEventListener('error', function(e) {
+                    console.error('Audio loading failed:', e);
+                });
+                
+                // Log when audio loads successfully
+                music.addEventListener('loadeddata', function() {
+                    console.log('Interstellar Main Theme audio loaded successfully');
+                });
+                
+                music.addEventListener('canplay', function() {
+                    console.log('Interstellar Main Theme audio can start playing');
+                });
+            }
+        })();
         
         // Enhanced video background loading with mobile optimization
         (function initVideoBackground() {
@@ -583,6 +762,11 @@
         
         // Enhanced button interaction
         document.getElementById('start').addEventListener('click', function() {
+            // Stop background music before navigation
+            if (window.stopBackgroundMusic) {
+                window.stopBackgroundMusic();
+            }
+            
             // Add a subtle loading effect
             this.style.transform = 'scale(0.95)';
             this.innerHTML = 'Launching... 🚀';
