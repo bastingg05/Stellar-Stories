@@ -591,57 +591,19 @@
 
     <script>
         
-        // Interstellar Main Theme Background Music - Autoplay Only
+        // Interstellar Main Theme Background Music - Manual Control Only
         (function initBackgroundMusic() {
             const music = document.getElementById('backgroundMusic');
             const musicToggle = document.getElementById('musicToggle');
             let isPlaying = false;
-            let autoplayAttempted = false;
             
             if (music && musicToggle) {
-                console.log('Interstellar Main Theme background music initialized');
+                console.log('Interstellar Main Theme background music initialized (manual control only)');
                 
                 // Set initial volume
                 music.volume = 0.6;
                 
-                // Enhanced autoplay function
-                const attemptAutoplay = () => {
-                    if (!autoplayAttempted) {
-                        autoplayAttempted = true;
-                        music.play().then(() => {
-                            console.log('Interstellar Main Theme autoplay successful');
-                            isPlaying = true;
-                            musicToggle.classList.add('playing');
-                            musicToggle.innerHTML = '♫';
-                        }).catch(error => {
-                            console.log('Autoplay prevented, waiting for user interaction:', error);
-                        });
-                    }
-                };
-                
-                // Try autoplay immediately
-                attemptAutoplay();
-                
-                // Enhanced autoplay on user interaction (fallback)
-                const triggerAutoplay = () => {
-                    if (!isPlaying) {
-                        music.play().then(() => {
-                            console.log('Interstellar Main Theme started on user interaction');
-                            isPlaying = true;
-                            musicToggle.classList.add('playing');
-                            musicToggle.innerHTML = '♫';
-                        }).catch(error => {
-                            console.log('User interaction autoplay failed:', error);
-                        });
-                    }
-                };
-                
-                // Try autoplay on first user interaction
-                document.addEventListener('click', triggerAutoplay, { once: true });
-                document.addEventListener('touchstart', triggerAutoplay, { once: true });
-                document.addEventListener('keydown', triggerAutoplay, { once: true });
-                
-                // Music toggle functionality
+                // Music toggle functionality (no autoplay)
                 musicToggle.addEventListener('click', function() {
                     if (isPlaying) {
                         music.pause();
@@ -654,9 +616,9 @@
                             isPlaying = true;
                             this.classList.add('playing');
                             this.innerHTML = '♫';
-                            console.log('Background music resumed');
+                            console.log('Background music started');
                         }).catch(error => {
-                            console.log('Failed to resume music:', error);
+                            console.log('Failed to start music:', error);
                         });
                     }
                 });
@@ -699,15 +661,19 @@
             }
         })();
         
-        // Enhanced video background loading with mobile optimization
+        // Enhanced video background loading with guaranteed autoplay
         (function initVideoBackground() {
             const video = document.getElementById('homeVideo');
             if (video) {
-                console.log('Initializing video background...');
+                console.log('Initializing video background with guaranteed autoplay...');
                 
                 // Set initial opacity to 0 and fade in when loaded
                 video.style.opacity = '0';
                 video.style.transition = 'opacity 1s ease-in-out';
+                
+                // Ensure video is muted for autoplay
+                video.muted = true;
+                video.setAttribute('muted', 'true');
                 
                 // Mobile-specific optimizations
                 video.setAttribute('webkit-playsinline', 'true');
@@ -716,6 +682,10 @@
                 video.setAttribute('x5-video-player-type', 'h5');
                 video.setAttribute('x5-video-player-fullscreen', 'false');
                 
+                // Force autoplay attributes
+                video.setAttribute('autoplay', 'true');
+                video.setAttribute('loop', 'true');
+                
                 video.addEventListener('loadstart', function() {
                     console.log('Video loading started...');
                 });
@@ -723,11 +693,15 @@
                 video.addEventListener('loadeddata', function() {
                     console.log('Home video loaded successfully');
                     video.style.opacity = '1';
+                    // Force play when data is loaded
+                    video.play().catch(e => console.log('Play on loadeddata failed:', e));
                 });
                 
                 video.addEventListener('canplay', function() {
                     console.log('Video can start playing');
                     video.style.opacity = '1';
+                    // Force play when video can play
+                    video.play().catch(e => console.log('Play on canplay failed:', e));
                 });
                 
                 video.addEventListener('error', function(e) {
@@ -742,19 +716,38 @@
                     video.load();
                 });
                 
-                // Force play if autoplay fails
-                video.play().catch(function(error) {
-                    console.log('Autoplay prevented, trying manual play:', error);
-                    // Try to play on user interaction
-                    document.addEventListener('click', function() {
-                        video.play().catch(e => console.log('Manual play failed:', e));
-                    }, { once: true });
-                    
-                    // Also try on touch for mobile
-                    document.addEventListener('touchstart', function() {
-                        video.play().catch(e => console.log('Touch play failed:', e));
-                    }, { once: true });
-                });
+                // Multiple attempts to ensure autoplay works
+                const attemptPlay = () => {
+                    video.play().catch(function(error) {
+                        console.log('Autoplay attempt failed:', error);
+                        // Try again after a short delay
+                        setTimeout(() => {
+                            video.play().catch(e => console.log('Delayed play failed:', e));
+                        }, 100);
+                    });
+                };
+                
+                // Try to play immediately
+                attemptPlay();
+                
+                // Try to play on any user interaction as fallback
+                const playOnInteraction = () => {
+                    video.play().catch(e => console.log('Interaction play failed:', e));
+                };
+                
+                document.addEventListener('click', playOnInteraction, { once: true });
+                document.addEventListener('touchstart', playOnInteraction, { once: true });
+                document.addEventListener('keydown', playOnInteraction, { once: true });
+                document.addEventListener('scroll', playOnInteraction, { once: true });
+                
+                // Periodic check to ensure video is playing
+                setInterval(() => {
+                    if (video.paused && video.readyState >= 2) {
+                        console.log('Video paused, attempting to resume...');
+                        video.play().catch(e => console.log('Resume play failed:', e));
+                    }
+                }, 2000);
+                
             } else {
                 console.error('Video element not found!');
             }
